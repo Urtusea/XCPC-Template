@@ -1,13 +1,10 @@
 #include <bits/stdc++.h>
 
 template <typename Info>
-class Segment_Tree_Bit {
-
-private:
+struct Segment_Tree_Bit {
     const int offset;
     std::vector<Info> node;
     
-public:
     Segment_Tree_Bit(int _n = 0) : offset(1 << (std::__lg(_n + 1) + 1)), node(2 << (std::__lg(_n + 1) + 1)) {}
 
     void build(const std::vector<Info> &info) {
