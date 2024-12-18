@@ -25,8 +25,7 @@ struct Sparse_Table_2D {
 
     void build(const std::vector<std::vector<Info>> &info) {
         for (int i = 1; i <= n; i++)
-            for (int j = 1; j <= m; j++)
-                node[pos(0, 0, i, j)] = info[i][j];
+            std::move(info[i].begin() + 1, info[i].end(), node + pos(0, 0, i, 1));
         build();
     }
 
