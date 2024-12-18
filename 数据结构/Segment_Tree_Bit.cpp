@@ -3,9 +3,11 @@
 template <typename Info>
 struct Segment_Tree_Bit {
     const int offset;
-    std::vector<Info> node;
+    Info *node;
     
-    Segment_Tree_Bit(int _n = 0) : offset(1 << (std::__lg(_n + 1) + 1)), node(2 << (std::__lg(_n + 1) + 1)) {}
+    Segment_Tree_Bit(int _n = 0) : offset(1 << (std::__lg(_n + 1) + 1)) {
+        node = new Info[2 << (std::__lg(_n + 1) + 1)]();
+    }
 
     void build(const std::vector<Info> &info) {
         for (int i = 1; i < info.size(); i++)
@@ -25,14 +27,5 @@ struct Segment_Tree_Bit {
             if ((j & 1) == 1) res += node[j ^ 1];
         }
         return res;
-    }
-};
-
-struct info {
-
-    info &operator += (info other) {
-    }
-
-    info operator + (info other) {
     }
 };
