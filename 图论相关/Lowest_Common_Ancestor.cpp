@@ -23,11 +23,11 @@ struct Lowest_Common_Ancestor {
         return i * n + j;
     }
 
-    void build(int root, auto &G) {
+    void build(int root, const auto &G) {
         int timer = 0;
         const auto dfs = [&](auto &&self, int u, int p) -> void {
             node[dfn[u] = ++timer] = p;
-            for (auto &to : G[u]) {
+            for (auto to : G[u]) {
                 if (to.v == p) continue;
                 self(self, to.v, u);
             }

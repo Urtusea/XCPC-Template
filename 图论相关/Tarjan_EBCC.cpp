@@ -14,7 +14,7 @@ inline constexpr std::vector<int> Tarjan_EBCC(int n, const auto &G) {
         dfn[u] = low[u] = ++tiemr;
         stk.push_back(u);
 
-        for (auto &to : G[u]) {
+        for (auto to : G[u]) {
             if (to.id == (pre_id ^ 1)) continue;
 
             if (!dfn[to.v]) {

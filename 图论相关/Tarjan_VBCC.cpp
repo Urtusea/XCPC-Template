@@ -19,7 +19,7 @@ inline constexpr std::vector<std::vector<int>> Tarjan_VBCC(int n, const auto &G)
         else
             stk.push_back(u);
         
-        for (auto &to : G[u]) {
+        for (auto to : G[u]) {
             if (!dfn[to.v]) {
                 self(self, to.v);
                 low[u] = std::min(low[u], low[to.v]);

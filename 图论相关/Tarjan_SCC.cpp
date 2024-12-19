@@ -14,7 +14,7 @@ inline constexpr std::vector<int> Tarjan_SCC(int n, const auto &G) {
         dfn[u] = low[u] = ++timer;
         stk.push_back(u);
         
-        for (auto &to : G[u]) {
+        for (auto to : G[u]) {
             if (!dfn[to.v]) {
                 self(self, to.v);
                 low[u] = std::min(low[u], low[to.v]);

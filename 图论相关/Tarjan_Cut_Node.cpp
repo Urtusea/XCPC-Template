@@ -13,7 +13,7 @@ inline constexpr std::vector<int> Tarjan_Cut_Node(int n, const auto &G) {
         int cnt_son = 0;
         dfn[u] = low[u] = ++timer;
         
-        for (auto &to : G[u]) {
+        for (auto to : G[u]) {
             if (!dfn[to.v]) {
                 ++cnt_son;
                 self(self, to.v);
