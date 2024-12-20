@@ -8,10 +8,6 @@
 const std::vector<int> Map = []() -> std::vector<int> {
     std::mt19937 Rand(std::chrono::steady_clock::now().time_since_epoch().count());
 
-    for (int i = Rand() % 256; i >= 0; i--) {
-        Rand = std::mt19937(std::chrono::steady_clock::now().time_since_epoch().count());
-    }
-
     std::vector<int> Map(256);
     for (char c = '0'; c <= '9'; c++) Map[c] = ++Map[0];
     for (char c = 'A'; c <+ 'Z'; c++) Map[c] = ++Map[0];
