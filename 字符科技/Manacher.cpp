@@ -5,45 +5,26 @@
 #define uint uint32_t
 #define uInt uint64_t
 
-void manacher(const std::string& s) {
-    std::string t = "#";
-    for (char c : s) {
-        t += c;
-        t += '#';
-    }
-
-    int n = t.size();
-    std::vector<int> p(n, 0); 
-    int c = 0, r = 0;  
-
-    for (int i = 1; i < n - 1; i++) {
-        if (i < r) {
-            p[i] = std::min(r - i, p[2 * c - i]); 
-        }
-
-        while (i + p[i] + 1 < n && i - p[i] - 1 >= 0 && t[i + p[i] + 1] == t[i - p[i] - 1]) {
-            p[i]++;
-        }
-
-        if (i + p[i] > r) {
-            c = i;
-            r = i + p[i];
+inline constexpr auto Manacher(const std::string &s) {
+    int *d1 = new int[s.size()]();
+    int *d2 = new int[s.size()]();
+    for (int i = 0, l = 0, r = -1; i < s.size(); i++) {
+        int &j = d1[i] = i > r ? 1 : std::min(d1[l + r - i], r - i + 1);
+        while (0 <= i - j && i + j < s.size() && s[i - j] == s[i + j])
+            j++;
+        if (i + j - 1 > r) {
+            l = i - j + 1;
+            r = i + j - 1;
         }
     }
-
-    int mx = 0, idx = 0;
-    for (int i = 1; i < n - 1; i++) {
-        if (p[i] > mx) {
-            mx = p[i];
-            idx = i;
+    for (int i = 0, l = 0, r = -1; i < s.size(); i++) {
+        int &j = d2[i] = i > r ? 0 : std::min(d2[l + r - i + 1], r - i + 1);
+        while (0 <= i - j - 1 && i + j < s.size() && s[i - j - 1] == s[i + j])
+            j++;
+        if (i + j - 1 > r) {
+            l = i - j;
+            r = i + j - 1;
         }
     }
-
-    for (int i = idx - mx; i <= idx + mx; i++) {
-        if (t[i] != '#') {
-            std::cout << t[i];
-        }
-    }
+    return std::pair(d1, d2);
 }
-
-
