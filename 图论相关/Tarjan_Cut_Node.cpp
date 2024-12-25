@@ -5,9 +5,11 @@
 #define uint uint32_t
 #define uInt uint64_t
 
-inline constexpr std::vector<int> Tarjan_Cut_Node(int n, const auto &G) {
-    std::vector<int> dfn(n + 1), low(n + 1), cut(n + 1);
-    
+inline constexpr auto Tarjan_Cut_Node(int n, const auto &G) {
+    int *dfn = new int[n + 1]();
+    int *low = new int[n + 1]();
+    int *cut = new int[n + 1]();
+
     int timer = 0, root = 0;
     const auto tarjan = [&](auto &&self, int u) -> void {
         int cnt_son = 0;

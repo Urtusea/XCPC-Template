@@ -5,9 +5,11 @@
 #define uint uint32_t
 #define uInt uint64_t
 
-inline constexpr std::vector<int> Tarjan_Cut_Edge(int n, int m, const auto &G) {
-    std::vector<int> dfn(n + 1), low(n + 1), cut(2 * m + 2);
-    
+inline constexpr auto Tarjan_Cut_Edge(int n, int m, const auto &G) {
+    int *dfn = new int[n + 1]();
+    int *low = new int[n + 1]();
+    int *cut = new int[2 * m + 2]();
+
     int timer = 0;
     const auto tarjan = [&](auto &&self, int u, int pre_id) -> void {
         dfn[u] = low[u] = ++timer;

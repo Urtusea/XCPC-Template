@@ -27,10 +27,12 @@ const std::vector<int> Map = []() -> std::vector<int> {
 template <typename Info, int B>
 struct String_Hash {
     const int n;
-    std::vector<Info> base;
-    std::vector<Info> hash;
+    Info *base;
+    Info *hash;
 
-    String_Hash(const std::string &s) : n(s.size()), base(n + 1), hash(n + 1) {
+    String_Hash(const std::string &s) : n(s.size()) {
+        base = new Info[n + 1]();
+        hash = new Info[n + 1]();
         base[0] = 1;
         for (int i = 0; i < n; i++) {
             base[i + 1] = base[i] * B;

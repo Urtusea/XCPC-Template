@@ -5,8 +5,10 @@
 #define uint uint32_t
 #define uInt uint64_t
 
-inline constexpr std::vector<int> Tarjan_EBCC(int n, const auto &G) {
-    std::vector<int> dfn(n + 1), low(n + 1), ebcc(n + 1);
+inline constexpr auto Tarjan_EBCC(int n, const auto &G) {
+    int *dfn = new int[n + 1]();
+    int *low = new int[n + 1]();
+    int *ebcc = new int[n + 1]();
 
     int tiemr = 0, ebcc_cnt = 0;
     const auto tarjan = [&](auto &&self, int u, int pre_id) -> void {
