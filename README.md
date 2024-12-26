@@ -1,1 +1,3 @@
-# This is a XCPC-Template
+# XCPC-Template
+
+欢迎使用本模板，不保证代码的美观性和实用性，保证大部分情况下的普适性
