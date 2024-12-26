@@ -28,3 +28,41 @@ struct Xor_Linear_Basis {
         }
     }
 };
+
+void init() {
+    
+}
+
+void code() {
+    int n;
+    std::cin >> n;
+
+    Xor_Linear_Basis<50> basis;
+    for (int i = 1; i <= n; i++) {
+        Int x;
+        std::cin >> x;
+        basis.insert(x);
+    }
+
+    const auto query = [&]() -> Int {
+        Int res = 0;
+        for (int i = 50; i >= 0; i--)
+            if ((res ^ basis.node[i]) > res)
+                res ^= basis.node[i];
+        return res;
+    };
+
+    std::cout << query() << '\n';
+}
+
+int main() {
+    std::cin.tie(nullptr)->sync_with_stdio(false);
+
+    // for (int i = 1, n = (std::cin >> n, n); i <= n; i++)
+    {
+        init();
+        code();
+    }
+
+    return 0;
+}
