@@ -154,8 +154,7 @@ void code() {
 int main() {
     std::cin.tie(nullptr)->sync_with_stdio(false);
 
-    f[3] = 4;
-    for (int i = 4; i <= N; i++) {
+    for (int i = 3; i <= N; i++) {
         f[i] = f[i - 1] + 2 * f[i - 2];
         if (i % 3 == 0) f[i] += 4;
     }
