@@ -51,7 +51,7 @@ struct Segment_Tree_Lazy {
     void update(int p, int l, int r, int L, int R, Lazy x) {
         if (R < l || r < L)
             return;
-        if (l <= L && R <= r)
+        if (L <= l && r <= R)
             return (void)(node[p].update(x, r - l + 1), post[p].update(x));
         const int m = (l + r) >> 1;
         push_down(p, l, r);
@@ -63,7 +63,7 @@ struct Segment_Tree_Lazy {
     Info query(int p, int l, int r, int L, int R) {
         if (R < l || r < L)
             return Info();
-        if (l <= L && R <= r)
+        if (L <= l && r <= R)
             return node[p];
         const int m = (l + r) >> 1;
         push_down(p, l, r);
