@@ -7,12 +7,14 @@
 
 template <typename Info, typename Comp>
 struct Cartesian_Tree {
-    const int n;
-    const Comp comp;
+    Comp comp;
+    int n;
     int *l;
     int *r;
 
-    Cartesian_Tree(int _n = 0, Comp &&_comp = Comp()) : n(_n), comp(std::move(_comp)) {
+    Cartesian_Tree(int _n = 0) {
+        comp = Comp();
+        n = _n;
         l = new int[_n + 1]();
         r = new int[_n + 1]();
     }

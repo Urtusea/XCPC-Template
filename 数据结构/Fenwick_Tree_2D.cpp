@@ -7,11 +7,13 @@
 
 template <typename Info>
 struct Fenwick_Tree_2D {
-    const int n;
-    const int m;
+    int n;
+    int m;
     Info *node;
 
-    Fenwick_Tree_2D(int _n = 0, int _m = 0) : n(_n), m(_m) {
+    Fenwick_Tree_2D(int _n = 0, int _m = 0) {
+        n = _n;
+        m = _m;
         node = new Info[_n * _m + 1]();
     }
 

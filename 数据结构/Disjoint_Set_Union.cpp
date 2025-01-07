@@ -9,7 +9,7 @@ struct Disjoint_Set_Union {
     int *set;
     int *siz;
 
-    Disjoint_Set_Union(int _n = 0)  {
+    Disjoint_Set_Union(int _n = 0) {
         set = new int[_n + 1]();
         siz = new int[_n + 1]();
         std::iota(set, set + _n + 1, 0);

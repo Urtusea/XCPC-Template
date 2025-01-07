@@ -12,8 +12,6 @@ struct Bit_Trie {
     int cnt[N * B];
     int nxt[N * B][2];
 
-    Bit_Trie() = default;
-
     void clear() {
         std::memset(cnt, 0, sizeof(cnt[0]) * (idx + 1));
         std::memset(nxt, 0, sizeof(nxt[0]) * (idx + 1));

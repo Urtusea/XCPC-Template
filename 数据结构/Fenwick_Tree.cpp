@@ -7,10 +7,11 @@
 
 template <typename Info>
 struct Fenwick_Tree {
-    const int n;
+    int n;
     Info *node;
 
-    Fenwick_Tree(int _n = 0) : n(_n) {
+    Fenwick_Tree(int _n = 0) {
+        n = _n;
         node = new Info[_n + 1]();
     }
 

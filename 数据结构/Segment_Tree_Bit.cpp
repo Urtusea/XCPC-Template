@@ -2,10 +2,11 @@
 
 template <typename Info>
 struct Segment_Tree_Bit {
-    const int offset;
+    int offset;
     Info *node;
     
-    Segment_Tree_Bit(int _n = 0) : offset(1 << (std::__lg(_n + 1) + 1)) {
+    Segment_Tree_Bit(int _n = 0) {
+        offset = 1 << (std::__lg(_n + 1) + 1);
         node = new Info[2 << (std::__lg(_n + 1) + 1)]();
     }
 

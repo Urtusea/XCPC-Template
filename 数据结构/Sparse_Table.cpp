@@ -7,11 +7,13 @@
 
 template <typename Info, typename Comp>
 struct Sparse_Table {
-    const int n;
-    const Comp comp;
+    Comp comp;
+    int n;
     Info *node;
 
-    Sparse_Table(int _n = 0, Comp &&_comp = Comp()) : n(_n), comp(std::move(_comp)) {
+    Sparse_Table(int _n = 0) {
+        comp = Comp();
+        n = _n;
         node = new Info[(std::__lg(_n) + 1) * _n + 1]();
     }
 

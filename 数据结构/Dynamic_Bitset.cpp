@@ -8,11 +8,13 @@
 struct Dynamic_Bitset {
     static constexpr int width = 63;
     static constexpr int digit = 6;
-    const int n;
-    const int m;
+    int n;
+    int m;
     uInt *node;
 
-    Dynamic_Bitset(int _n = 0) : n(_n), m((_n + width) >> digit) {
+    Dynamic_Bitset(int _n = 0) {
+        n = _n;
+        m = (_n + width) >> digit;
         node = new uInt[m]();
     }
 
