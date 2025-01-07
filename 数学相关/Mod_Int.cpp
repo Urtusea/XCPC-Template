@@ -5,7 +5,6 @@
 #define uint uint32_t
 #define uInt uint64_t
 
-template <int Cheat_GCC>
 struct Mod_Int {
     struct Barrett {
         uInt mod, inv_mod;
@@ -37,10 +36,6 @@ struct Mod_Int {
     template <std::signed_integral T>
     constexpr Mod_Int(T _val) : val(maintain(_val)) {}
 
-    constexpr static void replace_mod(uInt mod) {
-        B = mod;
-    }
-
     template <std::unsigned_integral T>
     constexpr T maintain(T x) const {
         return x >= B.mod ? B.opt(x) : x;
@@ -48,7 +43,7 @@ struct Mod_Int {
 
     template <std::signed_integral T>
     constexpr T maintain(T x) const {
-        return x < 0 ? -(Int)B.opt(-x) + B.mod : maintain<uInt>(x);
+        return x < 0 ? B.mod -(Int)B.opt(-x) : maintain<uInt>(x);
     }
 
     constexpr Mod_Int pow(uInt b) const {
@@ -62,7 +57,7 @@ struct Mod_Int {
         return val == 0 ? Mod_Int() : Mod_Int(B.mod - val);
     }
 
-    constexpr Mod_Int operator ~ () const {
+    Mod_Int operator ~ () const {
         assert(val != 0);
 
         Int a = B.mod, b = val;
@@ -81,22 +76,22 @@ struct Mod_Int {
         return Mod_Int(x);
     }
 
-    constexpr Mod_Int &operator += (Mod_Int other) & {
+    Mod_Int &operator += (Mod_Int other) & {
         (val += other.val) >= B.mod && (val -= B.mod);
         return *this;
     }
 
-    constexpr Mod_Int &operator -= (Mod_Int other) & {
+    Mod_Int &operator -= (Mod_Int other) & {
         (val -= other.val) >= B.mod && (val += B.mod);
         return *this;
     }
 
-    constexpr Mod_Int &operator *= (Mod_Int other) & {
+    Mod_Int &operator *= (Mod_Int other) & {
         val = B.mul(val, other.val);
         return *this;
     }
 
-    constexpr Mod_Int &operator /= (Mod_Int other) & {
+    Mod_Int &operator /= (Mod_Int other) & {
         val = B.mul(val, (~other).val);
         return *this;
     }
