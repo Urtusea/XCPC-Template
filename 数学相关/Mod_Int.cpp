@@ -96,19 +96,19 @@ struct Mod_Int {
         return *this;
     }
 
-    friend constexpr Mod_Int operator + (Mod_Int l, Mod_Int r) {
+    friend Mod_Int operator + (Mod_Int l, Mod_Int r) {
         return l += r;
     }
 
-    friend constexpr Mod_Int operator - (Mod_Int l, Mod_Int r) {
+    friend Mod_Int operator - (Mod_Int l, Mod_Int r) {
         return l -= r;
     }
 
-    friend constexpr Mod_Int operator * (Mod_Int l, Mod_Int r) {
+    friend Mod_Int operator * (Mod_Int l, Mod_Int r) {
         return l *= r;
     }
 
-    friend constexpr Mod_Int operator / (Mod_Int l, Mod_Int r) {
+    friend Mod_Int operator / (Mod_Int l, Mod_Int r) {
         return l /= r;
     }
 
@@ -120,11 +120,11 @@ struct Mod_Int {
         return l.val <=> r.val;
     }
 
-    friend constexpr std::istream &operator >> (std::istream &is, Mod_Int &x) {
+    friend std::istream &operator >> (std::istream &is, Mod_Int &x) {
         return is >> x.val;
     }
 
-    friend constexpr std::ostream &operator << (std::ostream &os, const Mod_Int &x) {
+    friend std::ostream &operator << (std::ostream &os, const Mod_Int &x) {
         return os << x.val;
     }
 };
