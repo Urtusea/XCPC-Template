@@ -5,15 +5,15 @@
 #define uint uint32_t
 #define uInt uint64_t
 
-struct edge_base {
+struct edge {
     int v;
     
-    edge_base(int _v = 0) : v(_v) {}
+    edge(int _v = 0) : v(_v) {}
 };
 
 template <std::integral T>
-struct edge_base_w : public edge_base {
+struct edge_w : public edge {
     T w;
     
-    edge_base_w(int _v = 0, T _w = 0) : edge_base(_v), w(_w) {}
+    edge_w(int _v = 0, T _w = 0) : edge(_v), w(_w) {}
 };

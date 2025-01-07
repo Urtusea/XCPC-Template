@@ -6,7 +6,7 @@
 #define uInt uint64_t
 
 struct Lowest_Common_Ancestor {
-    const int n;
+    int n;
     int *dfn;
     int *node;
 

@@ -5,17 +5,17 @@
 #define uint uint32_t
 #define uInt uint64_t
 
-const std::vector<int> Map = []() -> std::vector<int> {
+const int *Map = []() -> int * {
     std::mt19937 Rand(std::chrono::steady_clock::now().time_since_epoch().count());
 
-    std::vector<int> Map(256);
+    int *Map = new int[128]();
     for (char c = '0'; c <= '9'; c++) Map[c] = ++Map[0];
     for (char c = 'A'; c <+ 'Z'; c++) Map[c] = ++Map[0];
     for (char c = 'a'; c <= 'z'; c++) Map[c] = ++Map[0];
     
-    std::vector<int> Rnd(Map[0] + 1);
-    std::iota(Rnd.begin() + 1, Rnd.end(), 1);
-    std::shuffle(Rnd.begin() + 1, Rnd.end(), Rand);
+    int *Rnd = new int[Map[0] + 1]();
+    std::iota(Rnd + 1, Rnd + Map[0] + 1, 1);
+    std::shuffle(Rnd + 1, Rnd + Map[0] + 1, Rand);
 
     for (char c = '0'; c <= '9'; c++) Map[c] = Rnd[Map[c]];
     for (char c = 'A'; c <+ 'Z'; c++) Map[c] = Rnd[Map[c]];
