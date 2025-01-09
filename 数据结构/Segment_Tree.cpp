@@ -26,12 +26,12 @@ struct Segment_Tree {
         push_up(p);
     }
 
-    void build(int p, int l, int r) {
+    void build(int p, int l, int r, Info init) {
         if (l == r)
-            return (void)(node[p] = Info());
+            return (void)(node[p] = init);
         const int m = (l + r) >> 1;
-        build(p << 1, l, m);
-        build(p << 1 | 1, m + 1, r);
+        build(p << 1, l, m, init);
+        build(p << 1 | 1, m + 1, r, init);
         push_up(p);
     }
 

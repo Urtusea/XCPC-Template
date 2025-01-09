@@ -17,6 +17,13 @@ struct Segment_Tree_Bit {
             node[i] = node[i << 1] + node[i << 1 | 1];
     }
 
+    void build(int n, Info init) {
+        for (int i = 1; i <= n; i++)
+            node[i + offset] = init;
+        for (int i = offset - 1; i >= 1; i--)
+            node[i] = node[i << 1] + node[i << 1 | 1];
+    }
+
     void update(int u, Info x) {
         for (int i = u + offset; i; i >>= 1)
             node[i] += x;
