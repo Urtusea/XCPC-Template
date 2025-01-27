@@ -10,14 +10,10 @@ struct Sparse_Table_2D {
     Comp comp;
     int n;
     int m;
-    Info *node;
+    std::vector<Info> node;
 
-    Sparse_Table_2D(int _n = 0, int _m = 0) {
-        comp = Comp();
-        n = _n;
-        m = _m;
-        node = new Info[(std::__lg(_n) + 1) * (std::__lg(_m) + 1) * (_n + 1) * (_m + 1) + 1]();
-    }
+    Sparse_Table_2D(int _n = 0, int _m = 0)
+    : comp(Comp()), n(_n), m(_m), node((std::__lg(_n) + 1) * (std::__lg(_m) + 1) * (_n + 1) * (_m + 1) + 1) {}
 
     int pos(int x, int y, int i, int j) {
         const int a = (std::__lg(m) + 1) * n * m;
@@ -28,7 +24,7 @@ struct Sparse_Table_2D {
 
     void build(const std::vector<std::vector<Info>> &info) {
         for (int i = 1; i <= n; i++)
-            std::move(info[i].begin() + 1, info[i].end(), node + pos(0, 0, i, 1));
+            std::move(info[i].begin() + 1, info[i].end(), node.begin() + pos(0, 0, i, 1));
         build();
     }
 

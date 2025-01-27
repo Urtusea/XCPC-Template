@@ -7,13 +7,11 @@
 
 template <typename Info, typename Lazy>
 struct Segment_Tree_Lazy {
-    Info *node;
-    Lazy *post;
+    std::vector<Info> node;
+    std::vector<Lazy> post;
 
-    Segment_Tree_Lazy(int _n = 0) {
-        node = new Info[4 << std::__lg(_n + 1)]();
-        post = new Lazy[4 << std::__lg(_n + 1)]();
-    }
+    Segment_Tree_Lazy(int _n = 0)
+    : node(4 << std::__lg(_n + 1)), post(4 << std::__lg(_n + 1)) {}
 
     void push_up(int p) {
         node[p] = node[p << 1] + node[p << 1 | 1];

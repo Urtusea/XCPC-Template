@@ -7,11 +7,10 @@
 
 template <typename Info>
 struct Segment_Tree {
-    Info *node;
+    std::vector<Info> node;
 
-    Segment_Tree(int _n = 0) {
-        node = new Info[4 << std::__lg(_n + 1)]();
-    }
+    Segment_Tree(int _n = 0)
+    : node(4 << std::__lg(_n + 1)) {}
 
     void push_up(int p) {
         node[p] = node[p << 1] + node[p << 1 | 1];

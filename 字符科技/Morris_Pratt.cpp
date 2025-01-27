@@ -8,7 +8,7 @@
 inline constexpr int Morris_Pratt(const std::string &s) {
     const int n = s.size();
     int i = 0, j = 1, len = 0;
-    while (i < n && j < n && len < n) {
+    for (int len = 0; i < n && j < n && len < n; i == j && j++) {
         int l = (i + len) % n;
         int r = (j + len) % n;
         if (s[l] == s[r])
@@ -17,7 +17,6 @@ inline constexpr int Morris_Pratt(const std::string &s) {
             s[l] > s[r] ? i += len + 1 : j += len + 1;
             len = 0;
         }
-        if (i == j) j++;
     }
     return std::min(i, j);
 }

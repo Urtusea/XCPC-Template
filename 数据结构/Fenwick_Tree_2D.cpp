@@ -9,13 +9,10 @@ template <typename Info>
 struct Fenwick_Tree_2D {
     int n;
     int m;
-    Info *node;
+    std::vector<Info> node;
 
-    Fenwick_Tree_2D(int _n = 0, int _m = 0) {
-        n = _n;
-        m = _m;
-        node = new Info[_n * _m + 1]();
-    }
+    Fenwick_Tree_2D(int _n = 0, int _m = 0)
+    : n(_n), m(_m), node(_n * _m + 1) {}
 
     int pos(int x, int y) {
         return (x - 1) * m + y;

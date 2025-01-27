@@ -10,10 +10,8 @@ struct Fenwick_Tree {
     int n;
     Info *node;
 
-    Fenwick_Tree(int _n = 0) {
-        n = _n;
-        node = new Info[_n + 1]();
-    }
+    Fenwick_Tree(int _n = 0)
+    : n(_n), node(_n + 1) {}
 
     void update(int u, Info x) {
         for (int i = u; i <= n; i += i & -i)

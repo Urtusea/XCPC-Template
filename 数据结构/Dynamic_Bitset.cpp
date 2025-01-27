@@ -10,13 +10,10 @@ struct Dynamic_Bitset {
     static constexpr int digit = 6;
     int n;
     int m;
-    uInt *node;
+    std::vector<uInt> node;
 
-    Dynamic_Bitset(int _n = 0) {
-        n = _n;
-        m = (_n + width) >> digit;
-        node = new uInt[m]();
-    }
+    Dynamic_Bitset(int _n = 0)
+    : n(_n), m((_n + width) >> digit), node(m) {}
 
     bool get(int u) {
         return node[u >> digit] >> (u & width) & 1;

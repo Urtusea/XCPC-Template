@@ -7,13 +7,11 @@
 
 struct Lowest_Common_Ancestor {
     int n;
-    int *dfn;
-    int *node;
+    std::vector<int> dfn;
+    std::vector<int> node;
 
-    Lowest_Common_Ancestor(int _n = 0) : n(_n) {
-        dfn  = new int[_n + 1]();
-        node = new int[(std::__lg(_n) + 1) * n + 1]();
-    }
+    Lowest_Common_Ancestor(int _n = 0)
+    : n(_n), dfn(_n + 1), node((std::__lg(_n) + 1) * n + 1) {}
 
     int comp(int l, int r) {
         return dfn[l] < dfn[r] ? l : r;

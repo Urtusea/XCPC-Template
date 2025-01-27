@@ -26,17 +26,18 @@ const int *Map = []() -> int * {
 
 template <typename Info, int B>
 struct String_Hash {
-    const int n;
+    int n;
     Info *base;
     Info *hash;
 
-    String_Hash(const std::string &s) : n(s.size()) {
+    String_Hash(const std::string &s) {
+        n = s.size();
         base = new Info[n + 1]();
         hash = new Info[n + 1]();
         base[0] = 1;
         for (int i = 0; i < n; i++) {
             base[i + 1] = base[i] * B;
-            hash[i + 1] = hash[i] + base[i] * Map[s[i]];
+            hash[i + 1] = hash[i] + base[i] * (s[i] - 'a');
         }
     }
 

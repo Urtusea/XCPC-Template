@@ -9,20 +9,17 @@ template <typename Info, typename Comp>
 struct Sparse_Table {
     Comp comp;
     int n;
-    Info *node;
+    std::vector<Info> node;
 
-    Sparse_Table(int _n = 0) {
-        comp = Comp();
-        n = _n;
-        node = new Info[(std::__lg(_n) + 1) * _n + 1]();
-    }
+    Sparse_Table(int _n = 0)
+    : comp(Comp()), n(_n), node((std::__lg(_n) + 1) * _n + 1) {}
 
     int pos(int i, int j) {
         return i * n + j;
     }
 
     void build(const std::vector<Info> &info) {
-        std::move(info.begin() + 1, info.end(), node + 1);
+        std::move(info.begin() + 1, info.end(), node.begin() + 1);
         build();
     }
 

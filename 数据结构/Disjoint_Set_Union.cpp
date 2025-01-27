@@ -6,14 +6,13 @@
 #define uInt uint64_t
 
 struct Disjoint_Set_Union {
-    int *set;
-    int *siz;
+    std::vector<int> set;
+    std::vector<int> siz;
 
-    Disjoint_Set_Union(int _n = 0) {
-        set = new int[_n + 1]();
-        siz = new int[_n + 1]();
-        std::iota(set, set + _n + 1, 0);
-        std::fill(siz, siz + _n + 1, 1);
+    Disjoint_Set_Union(int _n = 0)
+    : set(_n + 1), siz(_n + 1) {
+        std::iota(set.begin(), set.end(), 0);
+        std::fill(siz.begin(), siz.end(), 1);
     }
 
     int find(int u) {

@@ -9,15 +9,11 @@ template <typename Info, typename Comp>
 struct Cartesian_Tree {
     Comp comp;
     int n;
-    int *l;
-    int *r;
+    std::vector<int> l;
+    std::vector<int> r;
 
-    Cartesian_Tree(int _n = 0) {
-        comp = Comp();
-        n = _n;
-        l = new int[_n + 1]();
-        r = new int[_n + 1]();
-    }
+    Cartesian_Tree(int _n = 0)
+    : comp(Comp()), n(_n), l(_n + 1), r(_n + 1) {}
 
     void build(const std::vector<Info> &info) {
         std::vector<int> stk = {0};
