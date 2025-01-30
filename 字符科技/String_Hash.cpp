@@ -5,27 +5,24 @@
 #define uint uint32_t
 #define uInt uint64_t
 
-const int *Map = []() -> int * {
-    std::mt19937 Rand(std::chrono::steady_clock::now().time_since_epoch().count());
-
-    int *Map = new int[128]();
-    for (char c = '0'; c <= '9'; c++) Map[c] = ++Map[0];
-    for (char c = 'A'; c <+ 'Z'; c++) Map[c] = ++Map[0];
-    for (char c = 'a'; c <= 'z'; c++) Map[c] = ++Map[0];
-    
-    int *Rnd = new int[Map[0] + 1]();
-    std::iota(Rnd + 1, Rnd + Map[0] + 1, 1);
-    std::shuffle(Rnd + 1, Rnd + Map[0] + 1, Rand);
-
-    for (char c = '0'; c <= '9'; c++) Map[c] = Rnd[Map[c]];
-    for (char c = 'A'; c <+ 'Z'; c++) Map[c] = Rnd[Map[c]];
-    for (char c = 'a'; c <= 'z'; c++) Map[c] = Rnd[Map[c]];
-
+inline constexpr std::array<int, 128> Rand() {
+    uInt seed = 114514;
+    for (auto c : __TIME__ __TIMESTAMP__) {
+        seed += c;
+        seed ^= seed << 13;
+        seed ^= seed >> 7;
+        seed ^= seed << 17;
+    }
+    std::array<int, 128> Map = {};
+    for (char c = '0'; c <= '9'; c++) Map[c] = seed++ % 64 + 1;
+    for (char c = 'A'; c <= 'Z'; c++) Map[c] = seed++ % 64 + 1;
+    for (char c = 'a'; c <= 'z'; c++) Map[c] = seed++ % 64 + 1;
     return Map;
-}();
+}
 
 template <typename Info, int B>
 struct String_Hash {
+    constexpr static std::array<int, 128> Map = Rand();
     int n;
     Info *base;
     Info *hash;
@@ -37,7 +34,7 @@ struct String_Hash {
         base[0] = 1;
         for (int i = 0; i < n; i++) {
             base[i + 1] = base[i] * B;
-            hash[i + 1] = hash[i] + base[i] * (s[i] - 'a');
+            hash[i + 1] = hash[i] + base[i] * Map[s[i]];
         }
     }
 

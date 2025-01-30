@@ -10,7 +10,6 @@ inline constexpr std::vector<int> Tarjan_Cut_Node(int n, const auto &G) {
     std::vector<int> low(n + 1);
     std::vector<int> cut(n + 1);
 
-
     int timer = 0, root = 0;
     const auto tarjan = [&](auto &&self, int u) -> void {
         int cnt_son = 0;
