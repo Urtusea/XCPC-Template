@@ -8,16 +8,9 @@ struct Segment_Tree_Bit {
     Segment_Tree_Bit(int _n = 0)
     : offset(1 << (std::__lg(_n + 1) + 1)), node(2 << (std::__lg(_n + 1) + 1)) {}
 
-    void build(const std::vector<Info> &info) {
-        for (int i = 1; i < info.size(); i++)
-            node[i + offset] = info[i];
-        for (int i = offset - 1; i >= 1; i--)
-            node[i] = node[i << 1] + node[i << 1 | 1];
-    }
-
-    void build(int n, Info init) {
+    void build(int n, const auto &init) {
         for (int i = 1; i <= n; i++)
-            node[i + offset] = init;
+            node[i + offset] = std::is_same<decltype(init), Info>::value ? init : init[i];
         for (int i = offset - 1; i >= 1; i--)
             node[i] = node[i << 1] + node[i << 1 | 1];
     }

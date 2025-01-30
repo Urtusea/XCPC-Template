@@ -8,7 +8,7 @@
 template <typename Info>
 struct Fenwick_Tree {
     int n;
-    Info *node;
+    std::vector<Info> node;
 
     Fenwick_Tree(int _n = 0)
     : n(_n), node(_n + 1) {}

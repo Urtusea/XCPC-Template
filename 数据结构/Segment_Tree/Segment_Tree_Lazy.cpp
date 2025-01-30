@@ -5,8 +5,11 @@
 #define uint uint32_t
 #define uInt uint64_t
 
-template <typename Info, typename Lazy>
+template <typename Lazy, typename Info>
 struct Segment_Tree_Lazy {
+#define lson (p << 1)
+#define rson (p << 1 | 1)
+
     std::vector<Info> node;
     std::vector<Lazy> post;
 
@@ -14,7 +17,7 @@ struct Segment_Tree_Lazy {
     : node(4 << std::__lg(_n + 1)), post(4 << std::__lg(_n + 1)) {}
 
     void push_up(int p) {
-        node[p] = node[p << 1] + node[p << 1 | 1];
+        node[p] = node[lson] + node[rson];
     }
 
     void push_down(int p, int l, int r) {
@@ -22,27 +25,18 @@ struct Segment_Tree_Lazy {
             node[u].update(post[p], node_size);
             post[u].update(post[p]);
         };
-        const int m = (l + r) >> 1;
-        edit(p << 1, m - l + 1);
-        edit(p << 1 | 1, r - m);
+        int m = (l + r) >> 1;
+        edit(lson, m - l + 1);
+        edit(rson, r - m);
         post[p].clear();
     }
 
-    void build(int p, int l, int r, const std::vector<Info> &info) {
+    void build(int p, int l, int r, const auto &init) {
         if (l == r)
-            return (void)(node[p] = info[l]);
-        const int m = (l + r) >> 1;
-        build(p << 1, l, m, info);
-        build(p << 1 | 1, m + 1, r, info);
-        push_up(p);
-    }
-
-    void build(int p, int l, int r, Info init) {
-        if (l == r)
-            return (void)(node[p] = init);
-        const int m = (l + r) >> 1;
-        build(p << 1, l, m, init);
-        build(p << 1 | 1, m + 1, r, init);
+            return (void)(node[p] = std::is_same<decltype(init), Info>::value ? init : init[l]);
+        int m = (l + r) >> 1;
+        build(lson, l, m, init);
+        build(rson, m + 1, r, init);
         push_up(p);
     }
 
@@ -51,10 +45,10 @@ struct Segment_Tree_Lazy {
             return;
         if (L <= l && r <= R)
             return (void)(node[p].update(x, r - l + 1), post[p].update(x));
-        const int m = (l + r) >> 1;
+        int m = (l + r) >> 1;
         push_down(p, l, r);
         update(p << 1, l, m, L, R, x);
-        update(p << 1 | 1, m + 1, r, L, R, x);
+        update(rson, m + 1, r, L, R, x);
         push_up(p);
     }
 
@@ -63,8 +57,11 @@ struct Segment_Tree_Lazy {
             return Info();
         if (L <= l && r <= R)
             return node[p];
-        const int m = (l + r) >> 1;
+        int m = (l + r) >> 1;
         push_down(p, l, r);
-        return query(p << 1, l, m, L, R) + query(p << 1 | 1, m + 1, r, L, R);
+        return query(p << 1, l, m, L, R) + query(rson, m + 1, r, L, R);
     }
+
+#undef lson
+#undef rson
 };
