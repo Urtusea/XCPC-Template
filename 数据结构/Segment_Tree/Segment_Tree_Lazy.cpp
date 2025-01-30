@@ -5,7 +5,7 @@
 #define uint uint32_t
 #define uInt uint64_t
 
-template <typename Lazy, typename Info>
+template <typename Info, typename Lazy>
 struct Segment_Tree_Lazy {
 #define lson (p << 1)
 #define rson (p << 1 | 1)
@@ -32,8 +32,15 @@ struct Segment_Tree_Lazy {
     }
 
     void build(int p, int l, int r, const auto &init) {
-        if (l == r)
-            return (void)(node[p] = std::is_same<decltype(init), Info>::value ? init : init[l]);
+        if (l == r) {
+            if constexpr (std::is_same_v<decltype(init), const Info &>)
+                node[p] = init;
+            else if constexpr (std::is_same_v<decltype(init), const std::vector<Info> &>)
+                node[p] = init[l];
+            else
+                static_assert(false, "[Error] Segment_Tree_Lazy::build -> 'init' type error");
+            return;
+        }
         int m = (l + r) >> 1;
         build(lson, l, m, init);
         build(rson, m + 1, r, init);

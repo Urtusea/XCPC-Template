@@ -7,30 +7,31 @@
 
 template <typename Info>
 struct Segment_Tree {
+#define lson (p << 1)
+#define rson (p << 1 | 1)
+
     std::vector<Info> node;
 
     Segment_Tree(int _n = 0)
     : node(4 << std::__lg(_n + 1)) {}
 
     void push_up(int p) {
-        node[p] = node[p << 1] + node[p << 1 | 1];
+        node[p] = node[lson] + node[rson];
     }
 
-    void build(int p, int l, int r, const std::vector<Info> &info) {
-        if (l == r)
-            return (void)(node[p] = info[l]);
-        const int m = (l + r) >> 1;
-        build(p << 1, l, m, info);
-        build(p << 1 | 1, m + 1, r, info);
-        push_up(p);
-    }
-
-    void build(int p, int l, int r, Info init) {
-        if (l == r)
-            return (void)(node[p] = init);
-        const int m = (l + r) >> 1;
-        build(p << 1, l, m, init);
-        build(p << 1 | 1, m + 1, r, init);
+    void build(int p, int l, int r, const auto &init) {
+        if (l == r) {
+            if constexpr (std::is_same_v<decltype(init), const Info &>)
+                node[p] = init;
+            else if constexpr (std::is_same_v<decltype(init), const std::vector<Info> &>)
+                node[p] = init[l];
+            else
+                static_assert(false, "[Error] Segment_Tree_Lazy::build -> 'init' type error");
+            return;
+        }
+        int m = (l + r) >> 1;
+        build(lson, l, m, init);
+        build(rson, m + 1, r, init);
         push_up(p);
     }
 
@@ -39,9 +40,9 @@ struct Segment_Tree {
             return;
         if (l == r)
             return (void)(node[p].update(x));
-        const int m = (l + r) >> 1;
-        update(p << 1, l, m, u, x);
-        update(p << 1 | 1, m + 1, r, u, x);
+        int m = (l + r) >> 1;
+        update(lson, l, m, u, x);
+        update(rson, m + 1, r, u, x);
         push_up(p);
     }
 
@@ -50,7 +51,10 @@ struct Segment_Tree {
             return Info();
         if (L <= l && r <= R)
             return node[p];
-        const int m = (l + r) >> 1;
-        return query(p << 1, l, m, L, R) + query(p << 1 | 1, m + 1, r, L, R);
+        int m = (l + r) >> 1;
+        return query(lson, l, m, L, R) + query(rson, m + 1, r, L, R);
     }
+
+#undef lson
+#undef rson
 };
