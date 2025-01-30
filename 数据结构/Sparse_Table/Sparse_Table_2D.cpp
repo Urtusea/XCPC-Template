@@ -10,34 +10,35 @@ struct Sparse_Table_2D {
     Comp comp;
     int n;
     int m;
-    std::vector<Info> node;
+    std::vector<std::vector<std::vector<Info>>> node;
 
     Sparse_Table_2D(int _n = 0, int _m = 0)
-    : comp(Comp()), n(_n), m(_m), node((std::__lg(_n) + 1) * (std::__lg(_m) + 1) * (_n + 1) * (_m + 1) + 1) {}
+    : comp(Comp()), n(_n), m(_m), node(std::vector(std::__lg(_n) + 1, std::vector(std::__lg(_m) + 1, std::vector<Info>(_n * _m + 1)))) {}
 
-    int pos(int x, int y, int i, int j) {
-        const int a = (std::__lg(m) + 1) * n * m;
-        const int b = n * m;
-        const int c = m;
-        return a * x + b * y + c * (i - 1) + j;
+    int pos(int i, int j) {
+        return (i - 1) * m + j;
     }
 
-    void build(const std::vector<std::vector<Info>> &info) {
-        for (int i = 1; i <= n; i++)
-            std::move(info[i].begin() + 1, info[i].end(), node.begin() + pos(0, 0, i, 1));
-        build();
-    }
-
-    void build() {
+    void build(const auto &init) {
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) {
+                if constexpr (std::is_same_v<decltype(init), const Info &>)
+                    node[0][0][pos(i, j)] = init;
+                else if constexpr (std::is_same_v<decltype(init), const std::vector<std::vector<Info>> &>)
+                    node[0][0][pos(i, j)] = init[i][j];
+                else
+                    static_assert(false, "[Error] Sparse_Table_2D::build -> 'init' type error");
+            }
+        }
         for (int x = 0; x <= std::__lg(n); x++) {
             for (int y = 0; y <= std::__lg(m); y++) {
                 if (x == 0 && y == 0) continue;
                 for (int i = 1; i + (1 << x) <= n + 1; i++) {
                     for (int j = 1; j + (1 << y) <= m + 1; j++) {
                         if (y == 0)
-                            node[pos(x, y, i, j)] = comp(node[pos(x - 1, y, i, j)], node[pos(x - 1, y, i + (1 << (x - 1)), j)]);
+                            node[x][y][pos(i, j)] = comp(node[x - 1][y][pos(i, j)], node[x - 1][y][pos(i + (1 << (x - 1)), j)]);
                         else
-                            node[pos(x, y, i, j)] = comp(node[pos(x, y - 1, i, j)], node[pos(x, y - 1, i, j + (1 << (y - 1)))]);
+                            node[x][y][pos(i, j)] = comp(node[x][y - 1][pos(i, j)], node[x][y - 1][pos(i, j + (1 << (y - 1)))]);
                     }
                 }
             }
@@ -45,10 +46,10 @@ struct Sparse_Table_2D {
     }
 
     Info query(std::array<int, 2> l, std::array<int, 2> r) {
-        const int x = std::__lg(r[0] - l[0] + 1);
-        const int y = std::__lg(r[1] - l[1] + 1);
+        int x = std::__lg(r[0] - l[0] + 1);
+        int y = std::__lg(r[1] - l[1] + 1);
         r[0] -= (1 << x) - 1;
         r[1] -= (1 << y) - 1;
-        return comp(comp(node[pos(x, y, l[0], l[1])], node[pos(x, y, r[0], r[1])]), comp(node[pos(x, y, l[0], r[1])], node[pos(x, y, r[0], l[1])]));
+        return comp(comp(node[x][y][pos(l[0], l[1])], node[x][y][pos(r[0], r[1])]), comp(node[x][y][pos(l[0], r[1])], node[x][y][pos(r[0], l[1])]));
     }
 };

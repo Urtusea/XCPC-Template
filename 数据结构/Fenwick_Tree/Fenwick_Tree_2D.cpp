@@ -14,8 +14,8 @@ struct Fenwick_Tree_2D {
     Fenwick_Tree_2D(int _n = 0, int _m = 0)
     : n(_n), m(_m), node(_n * _m + 1) {}
 
-    int pos(int x, int y) {
-        return (x - 1) * m + y;
+    int pos(int i, int j) {
+        return (i - 1) * m + j;
     }
 
     void update(int u, int v, Info x) {
