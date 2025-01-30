@@ -24,13 +24,11 @@ template <typename Info, int B>
 struct String_Hash {
     constexpr static std::array<int, 128> Map = Rand();
     int n;
-    Info *base;
-    Info *hash;
+    std::vector<Int> base;
+    std::vector<Int> hash;
 
-    String_Hash(const std::string &s) {
-        n = s.size();
-        base = new Info[n + 1]();
-        hash = new Info[n + 1]();
+    String_Hash(const std::string &s)
+    : n(s.size()), base(s.size() + 1), hash(s.size() + 1) {
         base[0] = 1;
         for (int i = 0; i < n; i++) {
             base[i + 1] = base[i] * B;
