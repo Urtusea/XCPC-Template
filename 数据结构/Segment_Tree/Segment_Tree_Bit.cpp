@@ -15,7 +15,7 @@ struct Segment_Tree_Bit {
             else if constexpr (std::is_same_v<decltype(init), const std::vector<Info> &>)
                 node[i + offset] = init[i];
             else
-                static_assert(false, "[Error] Segment_Tree_Lazy::build -> 'init' type error");
+                static_assert(false, "[Error] Segment_Tree_Bit::build -> 'init' type error");
         }
         for (int i = offset - 1; i >= 1; i--)
             node[i] = node[i << 1] + node[i << 1 | 1];

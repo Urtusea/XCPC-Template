@@ -26,7 +26,7 @@ struct Segment_Tree {
             else if constexpr (std::is_same_v<decltype(init), const std::vector<Info> &>)
                 node[p] = init[l];
             else
-                static_assert(false, "[Error] Segment_Tree_Lazy::build -> 'init' type error");
+                static_assert(false, "[Error] Segment_Tree::build -> 'init' type error");
             return;
         }
         int m = (l + r) >> 1;
