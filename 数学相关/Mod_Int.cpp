@@ -17,15 +17,6 @@ struct Mod_Int {
             else
                 return a - b * mod;
         }
-
-        constexpr uInt mul(uInt a, uInt b) const {
-            const uInt x = a * b;
-            const uInt y = (__uint128_t(x) * inv_mod) >> 64;
-            if (x < y * mod)
-                return x - y * mod + mod;
-            else
-                return x - y * mod;
-        }
     };
     static Barrett B;
     uInt val;
@@ -38,12 +29,12 @@ struct Mod_Int {
 
     template <std::unsigned_integral T>
     constexpr T maintain(T x) const {
-        return x >= B.mod ? B.opt(x) : x;
-    } 
+        return B.opt(x);
+    }
 
     template <std::signed_integral T>
     constexpr T maintain(T x) const {
-        return x < 0 ? B.mod -(Int)B.opt(-x) : maintain<uInt>(x);
+        return x < 0 ? B.mod - (Int)B.opt(-x) : maintain<uInt>(x);
     }
 
     constexpr Mod_Int pow(uInt b) const {
@@ -53,8 +44,8 @@ struct Mod_Int {
         return res;
     }
 
-    constexpr Mod_Int operator - () const {
-        return val == 0 ? Mod_Int() : Mod_Int(B.mod - val);
+    Mod_Int operator - () const {
+        return Mod_Int(B.mod - val);
     }
 
     Mod_Int operator ~ () const {
@@ -87,12 +78,12 @@ struct Mod_Int {
     }
 
     Mod_Int &operator *= (Mod_Int other) & {
-        val = B.mul(val, other.val);
+        val = B.opt(val * other.val);
         return *this;
     }
 
     Mod_Int &operator /= (Mod_Int other) & {
-        val = B.mul(val, (~other).val);
+        val = B.opt(val * (~other).val);
         return *this;
     }
 
