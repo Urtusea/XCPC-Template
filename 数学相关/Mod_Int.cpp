@@ -5,27 +5,35 @@
 #define uint uint32_t
 #define uInt uint64_t
 
-struct Mod_Int {
-    struct Barrett {
-        uInt mod, inv_mod;
-        constexpr Barrett(uInt _mod = 1) : mod(_mod), inv_mod((~0ULL) / _mod + 1) {}
+struct Barrett {
+    uInt mod, inv_mod;
+    
+    constexpr Barrett(uInt _mod = 1)
+    : mod(_mod), inv_mod((~0ULL) / _mod + 1) {}
 
-        constexpr uInt opt(uInt a) const {
-            const uInt b = (__uint128_t(a) * inv_mod) >> 64;
-            if (a < b * mod)
-                return a - b * mod + mod;
-            else
-                return a - b * mod;
-        }
-    };
+    constexpr uInt opt(uInt a) const {
+        const uInt b = (__uint128_t(a) * inv_mod) >> 64;
+        if (a < b * mod)
+            return a - b * mod + mod;
+        else
+            return a - b * mod;
+    }
+};
+
+struct Mod_Int {
     static Barrett B;
     uInt val;
 
-    constexpr Mod_Int() : val(0) {}
+    constexpr Mod_Int()
+    : val(0) {}
+    
     template <std::unsigned_integral T>
-    constexpr Mod_Int(T _val) : val(maintain(_val)) {}
+    constexpr Mod_Int(T _val)
+    : val(maintain(_val)) {}
+    
     template <std::signed_integral T>
-    constexpr Mod_Int(T _val) : val(maintain(_val)) {}
+    constexpr Mod_Int(T _val)
+    : val(maintain(_val)) {}
 
     template <std::unsigned_integral T>
     constexpr T maintain(T x) const {

@@ -24,7 +24,7 @@ struct Dynamic_Bitset {
     }
 
     void set(int u, int state) {
-         state && (node[u >> digit] &= (~0ULL) ^ (1ULL << (u & width)));
         !state && (node[u >> digit] |= 1ULL << (u & width));
+         state && (node[u >> digit] &= (~0ULL) ^ (1ULL << (u & width)));
     }
 };
