@@ -5,15 +5,16 @@
 #define uint uint32_t
 #define uInt uint64_t
 
-template <typename Info, uint Size>
+template <typename Info, typename Lazy, uint Size>
 struct Segment_Tree_Dynamic {
     struct Node {
         Info data;
+        Lazy post;
         uint lson;
         uint rson;
 
         Node()
-        : data(Info()), lson(0), rson(0) {}
+        : data(Info()), post(Lazy()), lson(0), rson(0) {}
     };
     uint last;
     Node node[Size / (sizeof(Node) / sizeof(uint))];
@@ -30,15 +31,20 @@ struct Segment_Tree_Dynamic {
         node[p].data = node[node[p].lson].data + node[node[p].rson].data;
     }
 
-    void update(uint &p, int l, int r, int u, Info x) {
+    void push_down(uint p, int l, int r) {
+        
+    }
+
+    void update(uint &p, int l, int r, int L, int R, Lazy tag) {
         if (!p) p = ++last;
         if (u < l || r < u)
             return;
         if (l == r)
-            return (void)(node[p].data.update(x, r - l + 1));
+            return (void)(node[p].data.update(tag, r - l + 1), node[p].post.update(tag));
         int m = (l + r) >> 1;
-        update(node[p].lson, l, m, u, x);
-        update(node[p].rson, m + 1, r, u, x);
+        push_down()
+        update(node[p].lson, l, m, L, R, tag);
+        update(node[p].rson, m + 1, r, L, R, tag);
         push_up(p);
     }
 
