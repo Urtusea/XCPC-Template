@@ -16,16 +16,14 @@ struct Segment_Tree_Dynamic {
         : data(Info()), lson(0), rson(0) {}
     };
     uint last;
-    uint root;
     Node node[Size / (sizeof(Node) / sizeof(uint))];
 
     Segment_Tree_Dynamic()
-    : last(0), root(0) {}
+    : last(0) {}
 
     void clear() {
         std::memset(node, 0, sizeof(node) * last);
         last = 0;
-        root = 0;
     }
 
     void push_up(int p) {
@@ -55,8 +53,8 @@ struct Segment_Tree_Dynamic {
 };
 
 enum uint_size {
-    uint_64m  = 1ULL << 24,
-    uint_128m = 1ULL << 25,
-    uint_256m = 1ULL << 26,
-    uint_512m = 1ULL << 27
+    uint_64m  = 1 << 24,
+    uint_128m = 1 << 25,
+    uint_256m = 1 << 26,
+    uint_512m = 1 << 27
 };
