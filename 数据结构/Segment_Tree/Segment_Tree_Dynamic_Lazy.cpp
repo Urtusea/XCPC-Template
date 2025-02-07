@@ -32,17 +32,26 @@ struct Segment_Tree_Dynamic {
     }
 
     void push_down(uint p, int l, int r) {
-        
+        if (!node[p].lson) node[p].lson = ++last;
+        if (!node[p].rson) node[p].rson = ++last;
+        const auto edit = [&](int u, int node_size) -> void {
+            node[u].data.update(node[p].post, node_size);
+            node[u].post.update(node[p].post);
+        };
+        int m = (l + r) >> 1;
+        edit(node[p].lson, m - l + 1);
+        edit(node[p].rson, r - m);
+        node[p].post.clear();
     }
 
     void update(uint &p, int l, int r, int L, int R, Lazy tag) {
         if (!p) p = ++last;
-        if (u < l || r < u)
+        if (R < l || r < L)
             return;
-        if (l == r)
+        if (L <= l && r <= R)
             return (void)(node[p].data.update(tag, r - l + 1), node[p].post.update(tag));
         int m = (l + r) >> 1;
-        push_down()
+        push_down(p, l, r);
         update(node[p].lson, l, m, L, R, tag);
         update(node[p].rson, m + 1, r, L, R, tag);
         push_up(p);
@@ -54,6 +63,7 @@ struct Segment_Tree_Dynamic {
         if (L <= l && r <= R)
             return node[p].data;
         int m = (l + r) >> 1;
+        push_down(p, l, r);
         return query(node[p].lson, l, m, L, R) + query(node[p].rson, m + 1, r, L, R);
     }
 };
