@@ -19,16 +19,18 @@ struct Segment_Tree {
         node[p] = node[lson] + node[rson];
     }
 
-    void build(int p, int l, int r, const auto &init) {
-        if (l == r) {
-            if constexpr (std::is_same_v<decltype(init), const Info &>)
-                node[p] = init;
-            else if constexpr (std::is_same_v<decltype(init), const std::vector<Info> &>)
-                node[p] = init[l];
-            else
-                static_assert(false, "[Error] Segment_Tree::build -> 'init' type error");
-            return;
-        }
+    void build(int p, int l, int r, Info init) {
+        if (l == r)
+            return (void)(node[p] = init);
+        int m = (l + r) >> 1;
+        build(lson, l, m, init);
+        build(rson, m + 1, r, init);
+        push_up(p);
+    }
+
+    void build(int p, int l, int r, std::vector<Info> &init) {
+        if (l == r)
+            return (void)(node[p] = init[l]);
         int m = (l + r) >> 1;
         build(lson, l, m, init);
         build(rson, m + 1, r, init);

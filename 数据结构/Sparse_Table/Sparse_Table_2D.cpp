@@ -19,17 +19,7 @@ struct Sparse_Table_2D {
         return (i - 1) * m + j;
     }
 
-    void build(const auto &init) {
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= m; j++) {
-                if constexpr (std::is_same_v<decltype(init), const Info &>)
-                    node[0][0][pos(i, j)] = init;
-                else if constexpr (std::is_same_v<decltype(init), const std::vector<std::vector<Info>> &>)
-                    node[0][0][pos(i, j)] = init[i][j];
-                else
-                    static_assert(false, "[Error] Sparse_Table_2D::build -> 'init' type error");
-            }
-        }
+    void build() {
         for (int x = 0; x <= std::__lg(n); x++) {
             for (int y = 0; y <= std::__lg(m); y++) {
                 if (x == 0 && y == 0) continue;
