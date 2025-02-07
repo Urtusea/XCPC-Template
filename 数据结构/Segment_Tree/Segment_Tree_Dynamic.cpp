@@ -60,21 +60,3 @@ enum uint_size {
     uint_256m = 1ULL << 26,
     uint_512m = 1ULL << 27
 };
-
-/*
-    使用方法：
-    
-    如果只需要开一颗线段树
-    uint root = 0;
-    Segment_Tree_Dynamic<Info, uint_size::uint_xxm> seg;
-    // 开的是对应使用了 xx Mb 内存的线段树，最多使用内存会在 xx Mb 上浮动 5-10mb 左右，函数开销等
-
-    如果需要开多颗线段树
-    uint root[max_root];
-    Segment_Tree_Dynamic<Info, uint_size::uintxxm> seg;
-    // 开的是对应使用了 xx Mb 内存的线段树，最多使用内存会在 xx Mb 上浮动 5-10mb 左右，函数开销等
-
-    注意 root 传入的是变量
-    seg.update(root, 1, n, u, x);
-    seg.update(root[idx], 1, n, u, x);
-*/
