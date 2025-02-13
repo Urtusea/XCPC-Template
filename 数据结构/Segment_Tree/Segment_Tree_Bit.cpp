@@ -27,11 +27,13 @@ struct Segment_Tree_Bit {
             node[i] += x;
     }
 
-    Info query(int l, int r, Info res = Info()) {
+    Info query(int l, int r) {
+        Info Lres = Info();
+        Info Rres = Info();
         for (int i = l + offset - 1, j = r + offset + 1; i ^ j ^ 1; i >>= 1, j >>= 1) {
-            if ((i & 1) == 0) res += node[i ^ 1];
-            if ((j & 1) == 1) res += node[j ^ 1];
+            if ((i & 1) == 0) Lres = Lres + node[i ^ 1];
+            if ((j & 1) == 1) Rres = node[j ^ 1] + Rres;
         }
-        return res;
+        return Lres + Rres;
     }
 };
