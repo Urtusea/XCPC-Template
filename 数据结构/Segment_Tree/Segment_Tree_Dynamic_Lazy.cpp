@@ -34,7 +34,7 @@ struct Segment_Tree_Dynamic {
     : last(0) {}
 
     void clear() {
-        std::memset(node, 0, sizeof(node) * last);
+        std::fill(node, node + last, Node());
         last = 0;
     }
 

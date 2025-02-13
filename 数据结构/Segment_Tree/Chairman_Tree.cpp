@@ -17,7 +17,7 @@ enum int_size {
 };
 
 template <typename Info, int Size>
-struct Segment_Tree_Dynamic {
+struct Chairman_Tree {
     struct Node {
         Info data;
         int lson;
@@ -29,7 +29,7 @@ struct Segment_Tree_Dynamic {
     int last;
     Node node[Size / (sizeof(Node) / sizeof(int))];
 
-    Segment_Tree_Dynamic()
+    Chairman_Tree()
     : last(0) {}
 
     void clear() {
@@ -41,23 +41,24 @@ struct Segment_Tree_Dynamic {
         node[p].data = node[node[p].lson].data + node[node[p].rson].data;
     }
 
-    void update(int &p, int l, int r, int u, Info x) {
+    void update(int &p, int q, int l, int r, int u, Info x) {
         if (!p) p = ++last;
         if (u < l || r < u)
             return;
+        node[p] = node[q];
         if (l == r)
             return (void)(node[p].data.update(x, r - l + 1));
         int m = (l + r) >> 1;
-        update(node[p].lson, l, m, u, x);
-        update(node[p].rson, m + 1, r, u, x);
+        update(node[p].lson, node[q].lson, l, m, u, x);
+        update(node[p].rson, node[q].rson, m + 1, r, u, x);
         push_up(p);
     }
 
-    Info query(int p, int l, int r, int L, int R) {
+    Info query(int p, int q, int l, int r, int L, int R) {
         if (!p || R < l || r < L)
             return Info();
         if (L <= l && r <= R)
-            return node[p].data;
+            return node[p].data - node[q].data;
         int m = (l + r) >> 1;
         return query(node[p].lson, l, m, L, R) + query(node[p].rson, m + 1, r, L, R);
     }
