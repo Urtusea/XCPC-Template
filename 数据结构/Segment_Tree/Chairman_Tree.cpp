@@ -41,16 +41,35 @@ struct Chairman_Tree {
         node[p].data = node[node[p].lson].data + node[node[p].rson].data;
     }
 
+    void build(int &p, int l, int r, Info init) {
+        p = ++last;
+        if (l == r)
+            return (void)(node[p].data = init);
+        int m = (l + r) >> 1;
+        build(node[p].lson, l, m, init);
+        build(node[p].rson, m + 1, r, init);
+        push_up(p);
+    }
+
+    void build(int &p, int l, int r, std::vector<Info> &init) {
+        p = ++last;
+        if (l == r)
+            return (void)(node[p].data = init[l]);
+        int m = (l + r) >> 1;
+        build(node[p].lson, l, m, init);
+        build(node[p].rson, m + 1, r, init);
+        push_up(p);
+    }
+
     void update(int &p, int q, int l, int r, int u, Info x) {
-        if (!p) p = ++last;
-        if (u < l || r < u)
-            return;
-        node[p] = node[q];
+        node[p = ++last] = node[q];
         if (l == r)
             return (void)(node[p].data.update(x, r - l + 1));
         int m = (l + r) >> 1;
-        update(node[p].lson, node[q].lson, l, m, u, x);
-        update(node[p].rson, node[q].rson, m + 1, r, u, x);
+        if (u <= m)
+            update(node[p].lson, node[q].lson, l, m, u, x);
+        else
+            update(node[p].rson, node[q].rson, m + 1, r, u, x);
         push_up(p);
     }
 
@@ -60,6 +79,6 @@ struct Chairman_Tree {
         if (L <= l && r <= R)
             return node[p].data - node[q].data;
         int m = (l + r) >> 1;
-        return query(node[p].lson, l, m, L, R) + query(node[p].rson, m + 1, r, L, R);
+        return query(node[p].lson, node[q].lson, l, m, L, R) + query(node[p].rson, node[q].rson, m + 1, r, L, R);
     }
 };

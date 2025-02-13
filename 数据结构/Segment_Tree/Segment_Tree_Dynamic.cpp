@@ -48,8 +48,10 @@ struct Segment_Tree_Dynamic {
         if (l == r)
             return (void)(node[p].data.update(x, r - l + 1));
         int m = (l + r) >> 1;
-        update(node[p].lson, l, m, u, x);
-        update(node[p].rson, m + 1, r, u, x);
+        if (u <= m)
+            update(node[p].lson, l, m, u, x);
+        else
+            update(node[p].rson, m + 1, r, u, x);
         push_up(p);
     }
 
