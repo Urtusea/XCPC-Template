@@ -16,33 +16,33 @@ struct Trie {
         if constexpr (State >> 2 & 1) for (char c = 'a'; c <= 'z'; c++) Map[c] = Map[0]++;
         return Map;
     };
-    int idx;
-    int nxt[N + 1][M + 2];
+    int p;
+    int f[N + 1][M + 2];
 
     void clear() {
-        std::memset(nxt, 0, sizeof(nxt[0]) * (idx + 1));
-        idx = 0;
+        std::memset(f, 0, sizeof(f[0]) * (p + 1));
+        p = 0;
     }
 
-    int get_next(int &p) {
-        return p ? p : p = ++idx;
+    int nxt(int &u) {
+        return u ? u : u = ++p;
     }
 
     void insert(const std::string &s, int u = 0) {
         for (auto &c : s)
-            nxt[u = get_next(nxt[u][Map[c]])][M]++;
-        nxt[u][M + 1]++;
+            f[u = nxt(f[u][Map[c]])][M]++;
+        f[u][M + 1]++;
     }
 
     void erase(const std::string &s, int u = 0) {
         for (auto &c : s)
-            nxt[u = get_next(nxt[u][Map[c]])][M]--;
-        nxt[u][M + 1]--;
+            f[u = nxt(f[u][Map[c]])][M]--;
+        f[u][M + 1]--;
     }
 
     int count(const std::string &s, int Mode = 0, int u = 0) {
         for (auto &c : s)
-            if ((u = nxt[u][Map[c]]) == 0) return 0;
-        return nxt[u][M + Mode];
+            if ((u = f[u][Map[c]]) == 0) return 0;
+        return f[u][M + Mode];
     }
 };
