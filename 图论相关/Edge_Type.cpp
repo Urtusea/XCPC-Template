@@ -7,13 +7,11 @@
 
 struct edge {
     int v;
-    
-    edge(int _v = 0) : v(_v) {}
+    constexpr edge(int _v = 0) : v(_v) {}
 };
 
 template <std::integral T>
 struct edge_w : public edge {
     T w;
-    
-    edge_w(int _v = 0, T _w = 0) : edge(_v), w(_w) {}
+    constexpr edge_w(int _v = 0, T _w = 0) : edge(_v), w(_w) {}
 };
