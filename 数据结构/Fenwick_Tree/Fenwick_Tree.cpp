@@ -5,22 +5,23 @@
 #define uint uint32_t
 #define uInt uint64_t
 
-template <typename Info>
-struct Fenwick_Tree {
+template <typename Info, int N> struct Fenwick_Tree {
     int n;
-    std::vector<Info> node;
+    Info f[N + 1];
 
-    Fenwick_Tree(int _n = 0)
-    : n(_n), node(_n + 1) {}
+    void init(int _n) {
+        n = _n;
+        std::fill(f, f + n + 1, Info());
+    }
 
     void update(int u, Info x) {
-        for (int i = u; i <= n; i += i & -i)
-            node[i] += x;
+        for (; u <= n; u += -u & u)
+            f[u] += x;
     }
 
     Info query(int u, Info x = Info()) {
-        for (int i = u; i; i -= i & -i)
-            x += node[i];
+        for (; u; u -= -u & u)
+            x += f[u];
         return x;
     }
 };

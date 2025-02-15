@@ -5,27 +5,31 @@
 #define uint uint32_t
 #define uInt uint64_t
 
-template <typename Info, typename Comp>
-struct Sparse_Table {
-    Comp comp;
+template <typename Info, typename Comp, int N> struct Sparse_Table {
     int n;
-    std::vector<Info> node;
+    Comp g;
+    Info f[N * (std::__lg(N) + 1)];
 
-    Sparse_Table(int _n = 0)
-    : comp(Comp()), n(_n), node((std::__lg(_n) + 1) * _n + 1) {}
+    Sparse_Table(auto &&_g) : g(_g) {}
 
-    int pos(int i, int j) {
-        return i * n + j;
+    inline constexpr int pos(int i, int j) const noexcept {
+        return (i - 1) * n + j;
+    }
+
+    void init(int _n, std::vector<Info> &init) {
+        n = _n;
+        for (int i = 1; i <= n; i++)
+            f[i] = init[i];
     }
 
     void build() {
-        for (int k = 1; k <= std::__lg(n); k++)
-            for (int i = 1; i + (1 << k) <= n + 1; i++)
-                node[pos(k, i)] = comp(node[pos(k - 1, i)], node[pos(k - 1, i + (1 << (k - 1)))]);
+        for (int j = 1; j <= std::__lg(n); j++)
+            for (int i = 1; i + (1 << j) - 1 <= n; i++)
+                f[pos(j, i)] = g(f[pos(j - 1, i)], f[pos(j - 1, i + (1 << (j - 1)))]);
     }
 
     Info query(int l, int r) {
-        const int k = std::__lg(r - l + 1);
-        return comp(node[pos(k, l)], node[pos(k, r - (1 << k) + 1)]);
+        int k = std::__lg(r - l + 1);
+        return g(f[pos(k, l)], f[pos(k, r - (1 << k) + 1)]);
     }
 };

@@ -5,18 +5,17 @@
 #define uint uint32_t
 #define uInt uint64_t
 
-struct Disjoint_Set_Union {
-    std::vector<int> set;
-    std::vector<int> siz;
+template <int N> struct Disjoint_Set_Union {
+    int f[N + 1];
+    int g[N + 1];
 
-    Disjoint_Set_Union(int _n = 0)
-    : set(_n + 1), siz(_n + 1) {
-        std::iota(set.begin(), set.end(), 0);
-        std::fill(siz.begin(), siz.end(), 1);
+    void init(int n) {
+        std::iota(f, f + n + 1, 0);
+        std::fill(g, g + n + 1, 1);
     }
 
     int find(int u) {
-        return u == set[u] ? u : set[u] = find(set[u]);
+        return u == f[u] ? u : f[u] = find(f[u]);
     }
 
     void merge(int u, int v) {
@@ -24,12 +23,12 @@ struct Disjoint_Set_Union {
         v = find(v);
         if (u == v) return;
 
-        if (siz[u] > siz[v]) {
-            set[v] = u;
-            siz[u] += siz[v];
+        if (g[u] > g[v]) {
+            f[v] = u;
+            g[u] += g[v];
         } else {
-            set[u] = v;
-            siz[v] += siz[u];
+            f[u] = v;
+            g[v] += g[u];
         }
     }
 };

@@ -5,34 +5,40 @@
 #define uint uint32_t
 #define uInt uint64_t
 
-template <typename Info, typename Comp>
-struct Sparse_Table_2D {
-    Comp comp;
+template <typename Info, typename Comp, int N, int M> struct Sparse_Table_2D {
     int n;
     int m;
-    std::vector<std::vector<std::vector<Info>>> node;
+    Comp g;
+    Info f[std::__lg(N) + 1][std::__lg(M) + 1][N * M + 1];
 
-    Sparse_Table_2D(int _n = 0, int _m = 0)
-    : comp(Comp()), n(_n), m(_m), node(std::vector(std::__lg(_n) + 1, std::vector(std::__lg(_m) + 1, std::vector<Info>(_n * _m + 1)))) {}
+    Sparse_Table_2D(auto &&_g) : g(_g) {}
 
-    int pos(int i, int j) {
+    inline constexpr int pos(int i, int j) const noexcept {
         return (i - 1) * m + j;
     }
 
+    void init(int _n, int _m, std::vector<std::vector<Info>> &init) {
+        n = _n;
+        m = _m;
+        for (int i = 1; i <= n; i++)
+            for (int j = 1; j <= m; j++)
+                f[0][0][pos(i, j)] = init[i][j];
+    }
+
     void build() {
-        for (int x = 0; x <= std::__lg(n); x++) {
-            for (int y = 0; y <= std::__lg(m); y++) {
-                if (x == 0 && y == 0) continue;
-                for (int i = 1; i + (1 << x) <= n + 1; i++) {
-                    for (int j = 1; j + (1 << y) <= m + 1; j++) {
-                        if (y == 0)
-                            node[x][y][pos(i, j)] = comp(node[x - 1][y][pos(i, j)], node[x - 1][y][pos(i + (1 << (x - 1)), j)]);
-                        else
-                            node[x][y][pos(i, j)] = comp(node[x][y - 1][pos(i, j)], node[x][y - 1][pos(i, j + (1 << (y - 1)))]);
-                    }
-                }
-            }
-        }
+        for (int k = 1; k <= std::__lg(n); k++)
+            for (int i = 1; i <= n; i++)
+                for (int j = 1; j <= m; j++)
+                    f[k][0][pos(i, j)] = g(f[k - 1][0][pos(i, j)], f[k - 1][0][pos(i + (1 << (k - 1)), j)]);
+        for (int k = 1; k <= std::__lg(m); k++)
+            for (int i = 1; i <= n; i++)
+                for (int j = 1; j <= m; j++)
+                    f[0][k][pos(i, j)] = g(f[0][k - 1][pos(i, j)], f[0][k - 1][pos(i, j + (1 << (k - 1)))]);
+        for (int x = 1; x <= std::__lg(n); x++)
+            for (int y = 1; y <= std::__lg(m); y++)
+                for (int i = 1; i <= n; i++)
+                    for (int j = 1; j <= m; j++)
+                        f[x][y][pos(i, j)] = g(f[x][y - 1][pos(i, j)], f[x][y - 1][pos(i, j + (1 << (y - 1)))]);
     }
 
     Info query(std::array<int, 2> l, std::array<int, 2> r) {
@@ -40,6 +46,6 @@ struct Sparse_Table_2D {
         int y = std::__lg(r[1] - l[1] + 1);
         r[0] -= (1 << x) - 1;
         r[1] -= (1 << y) - 1;
-        return comp(comp(node[x][y][pos(l[0], l[1])], node[x][y][pos(r[0], r[1])]), comp(node[x][y][pos(l[0], r[1])], node[x][y][pos(r[0], l[1])]));
+        return g(g(f[x][y][pos(l[0], l[1])], f[x][y][pos(r[0], r[1])]), g(f[x][y][pos(l[0], r[1])], f[x][y][pos(r[0], l[1])]));
     }
 };
