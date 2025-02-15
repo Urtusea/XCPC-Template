@@ -13,12 +13,13 @@ struct Lowest_Common_Ancestor {
     Lowest_Common_Ancestor(int _n = 0)
     : n(_n), dfn(_n + 1), node((std::__lg(_n) + 1) * n + 1) {}
 
+
+    inline constexpr int pos(int i, int j) const noexcept {
+        return i * n + j;
+    }
+    
     int comp(int l, int r) {
         return dfn[l] < dfn[r] ? l : r;
-    }
-
-    int pos(int i, int j) {
-        return i * n + j;
     }
 
     void build(int root, const auto &G) {

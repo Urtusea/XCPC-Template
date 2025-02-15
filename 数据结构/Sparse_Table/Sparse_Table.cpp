@@ -13,7 +13,7 @@ template <typename Info, typename Comp, int N> struct Sparse_Table {
     Sparse_Table(auto &&_g) : g(_g) {}
 
     inline constexpr int pos(int i, int j) const noexcept {
-        return (i - 1) * n + j;
+        return i * n + j;
     }
 
     void init(int _n, std::vector<Info> &init) {
