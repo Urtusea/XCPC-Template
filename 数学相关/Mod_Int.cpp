@@ -6,92 +6,72 @@
 #define uInt uint64_t
 
 struct Barrett {
-    uInt mod, inv_mod;
-    
-    constexpr Barrett(uInt _mod = 1)
-    : mod(_mod), inv_mod((~0ULL) / _mod + 1) {}
+    uInt mod;
+    uInt inv;
 
-    constexpr uInt opt(uInt a) const {
-        const uInt b = (__uint128_t(a) * inv_mod) >> 64;
-        if (a < b * mod)
-            return a - b * mod + mod;
-        else
-            return a - b * mod;
+    constexpr Barrett(uInt _mod = 1) : mod(_mod), inv((~0ULL) / _mod + 1) {}
+
+    constexpr friend uInt operator % (const uInt &x, const Barrett &P) {
+        uInt res = x - ((__uint128_t(x) * P.inv) >> 64) * P.mod;
+        return res >= P.mod ? res + P.mod : res;
     }
 };
 
 struct Mod_Int {
-    static Barrett B;
+    // constexpr static Barrett P = 1e9 + 7;
+    // constexpr static Barrett P = 998244353;
+    static Barrett P;
     uInt val;
 
-    constexpr Mod_Int()
-    : val(0) {}
-    
-    template <std::unsigned_integral T>
-    constexpr Mod_Int(T _val)
-    : val(maintain(_val)) {}
-    
-    template <std::signed_integral T>
-    constexpr Mod_Int(T _val)
-    : val(maintain(_val)) {}
+    constexpr Mod_Int(uInt _val = 0) : val(_val) {}
 
-    template <std::unsigned_integral T>
-    constexpr T maintain(T x) const {
-        return B.opt(x);
-    }
-
-    template <std::signed_integral T>
-    constexpr T maintain(T x) const {
-        return x < 0 ? B.mod - (Int)B.opt(-x) : maintain<uInt>(x);
-    }
-
-    constexpr Mod_Int pow(uInt b) const {
-        Mod_Int a = *this, res = 1;
-        for (; b; a *= a, b >>= 1)
+    Mod_Int pow(uInt b) {
+        Mod_Int res = 1;
+        for (Mod_Int a = *this; b; b >>= 1, a *= a)
             if (b & 1) res *= a;
         return res;
     }
 
-    Mod_Int operator - () const {
-        return Mod_Int(B.mod - val);
+    Mod_Int inv() {
+        return ~(*this);
     }
 
-    Mod_Int operator ~ () const {
+    Mod_Int operator - () {
+        return Mod_Int(P.mod - val);
+    }
+    
+    Mod_Int operator ~ () {
         assert(val != 0);
-
-        Int a = B.mod, b = val;
+        Int a = P.mod, b = val;
         Int x = 0, y = 1;
-
         while (b) {
-            const Int tmp = a / b;
+            Int tmp = a / b;
             a -= tmp * b;
             x -= tmp * y;
             std::swap(a, b);
             std::swap(x, y);
         }
-        if (x < 0) x += B.mod / a;
-
         assert(a == 1);
-        return Mod_Int(x);
+        return x < 0 ? x + P.mod : x;
     }
 
     Mod_Int &operator += (Mod_Int other) & {
-        (val += other.val) >= B.mod && (val -= B.mod);
+        (val += other.val) >= P.mod && (val -= P.mod);
         return *this;
     }
 
     Mod_Int &operator -= (Mod_Int other) & {
-        (val -= other.val) >= B.mod && (val += B.mod);
+        (val -= other.val) >= P.mod && (val += P.mod);
         return *this;
     }
 
     Mod_Int &operator *= (Mod_Int other) & {
-        val = B.opt(val * other.val);
+        val = val * other.val % P;
         return *this;
     }
 
     Mod_Int &operator /= (Mod_Int other) & {
-        val = B.opt(val * (~other).val);
+        val = val * (~other).val % P;
         return *this;
     }
 

@@ -6,16 +6,13 @@
 #define uInt uint64_t
 
 struct Barrett {
-    uInt mod, inv_mod;
-    
-    constexpr Barrett(uInt _mod = 1)
-    : mod(_mod), inv_mod((~0ULL) / _mod + 1) {}
+    uInt mod;
+    uInt inv;
 
-    constexpr uInt opt(uInt a) const {
-        const uInt b = (__uint128_t(a) * inv_mod) >> 64;
-        if (a < b * mod)
-            return a - b * mod + mod;
-        else
-            return a - b * mod;
+    constexpr Barrett(uInt _mod = 1) : mod(_mod), inv((~0ULL) / _mod + 1) {}
+
+    constexpr friend uInt operator % (uInt x, const Barrett &P) {
+        uInt res = x - ((__uint128_t(x) * P.inv) >> 64) * P.mod;
+        return res >= P.mod ? res + P.mod : res;
     }
 };

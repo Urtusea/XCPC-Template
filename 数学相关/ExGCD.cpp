@@ -6,11 +6,11 @@
 #define uInt uint64_t
 
 template <std::integral T>
-inline constexpr std::tuple<T, T, T> Exgcd(T a, T b) {
-    if (b == 0) {
-        return {a, 1, 0};
-    } else {
-        auto [g, x0, y0] = Exgcd(b, a % b);
-        return {g, y0, x0 - (a / b) * y0};
+std::tuple<T, T, T> Exgcd(T a, T b) {
+    T x1 = 1, x2 = 0, x3 = 0, x4 = 1, c;
+    while (b) {
+        c = a / b;
+        std::tie(x1, x2, x3, x4, a, b) = {x3, x4, x1 - x3 * c, x2 - x4 * c, b, a - b * c};
     }
+    return {a, x1, x2};
 }

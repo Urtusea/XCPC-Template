@@ -10,7 +10,7 @@ struct Xor_Linear_Basis {
     using Info = std::conditional_t<B <= 31, uint, uInt>;
     Info node[B + 1];
 
-    Xor_Linear_Basis() {
+    void init() {
         std::memset(node, 0, sizeof(node));
     }
 
