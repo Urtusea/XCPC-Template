@@ -5,7 +5,7 @@
 #define uint uint32_t
 #define uInt uint64_t
 
-template <typename Info, typename Comp, Comp Func(Info, Info), int N, int M> struct Sparse_Table_2D {
+template <typename Info, Info (*Comp)(Info l, Info r), int N, int M> struct Sparse_Table_2D {
     int n;
     int m;
     Info f[std::__lg(N) + 1][std::__lg(M) + 1][N * M + 1];
