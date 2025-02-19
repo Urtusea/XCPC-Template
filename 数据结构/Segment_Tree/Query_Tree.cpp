@@ -18,13 +18,13 @@ template <typename Info, int N> struct Query_Tree {
         update(p << 1, m + 1, r, L, R, x);
     }
 
-    void dfs(int p, int l, int r, auto &&add, auto &&del, auto &&call) {
+    void query(int p, int l, int r, auto &&add, auto &&del, auto &&call) {
         add(f[p]);
         if (l == r)
             return call();
         int m = (l + r) >> 1;
-        dfs(p << 1 | 1, l, m);
-        dfs(p << 1, m + 1, r);
+        query(p << 1 | 1, l, m);
+        query(p << 1, m + 1, r);
         del(f[p]);
     }
 };
