@@ -21,10 +21,11 @@ template <int N> struct Disjoint_Set_Union_Rollback {
         return u == f[u] ? u : find(f[u]);
     }
 
-    void merge(int u, int v) {
-        int fu = find(u);
-        int fv = find(v);
-        if (fu == fv) return;
+    bool merge(int u, int v) {
+        u = find(u);
+        v = find(v);
+        if (u == v)
+            return false;
 
         if (g[u] > g[v]) {
             s[++p] = v;
@@ -35,13 +36,12 @@ template <int N> struct Disjoint_Set_Union_Rollback {
             f[u] = v;
             g[v] += g[u];
         }
+
+        return true;
     }
     void rollback() {
         int u = s[p--];
-        int v = f[u];
-        do {
-            g[v] -= g[u];
-        } while (v != f[v]);
+        g[f[u]] -= g[u];
         f[u] = u;
     }
 };
