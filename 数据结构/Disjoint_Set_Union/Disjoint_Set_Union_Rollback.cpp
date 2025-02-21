@@ -39,6 +39,7 @@ template <int N> struct Disjoint_Set_Union_Rollback {
 
         return true;
     }
+    
     void rollback() {
         int u = s[p--];
         g[f[u]] -= g[u];
