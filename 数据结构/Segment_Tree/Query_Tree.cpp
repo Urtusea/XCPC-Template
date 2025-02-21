@@ -9,7 +9,7 @@ template <typename Info, int N> struct Query_Tree {
     std::vector<Info> f[4 << std::__lg(N)];
 
     void init(int n) {
-        for (int i = 1; i <= (4 << std::__lg(n)); i++)
+        for (int i = 1; i < (4 << std::__lg(n)); i++)
             f[i].clear();
     }
 
@@ -19,8 +19,8 @@ template <typename Info, int N> struct Query_Tree {
         if (L <= l && r <= R)
             return f[p].push_back(x);
         int m = (l + r) >> 1;
-        add_query(p << 1 | 1, l, m, L, R, x);
-        add_query(p << 1, m + 1, r, L, R, x);
+        add_query(p << 1, l, m, L, R, x);
+        add_query(p << 1 | 1, m + 1, r, L, R, x);
     }
 
     void query(int p, int l, int r, auto &&add, auto &&del, auto &&call) {
@@ -29,8 +29,8 @@ template <typename Info, int N> struct Query_Tree {
             call(l);
         } else {
             int m = (l + r) >> 1;
-            query(p << 1 | 1, l, m, add, del, call);
-            query(p << 1, m + 1, r, add, del, call);
+            query(p << 1, l, m, add, del, call);
+            query(p << 1 | 1, m + 1, r, add, del, call);
         }
         del(f[p]);
     }

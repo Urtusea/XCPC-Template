@@ -9,15 +9,15 @@ template <typename Info, int N> struct Segment_Tree {
     Info f[4 << std::__lg(N)];
 
     void push_up(int p) {
-        f[p] = f[p << 1 | 1] + f[p << 1];
+        f[p] = f[p << 1] + f[p << 1 | 1];
     }
 
     void build(int p, int l, int r, Info init) {
         if (l == r)
             return (void)(f[p] = init);
         int m = (l + r) >> 1;
-        build(p << 1 | 1, l, m, init);
-        build(p << 1, m + 1, r, init);
+        build(p << 1, l, m, init);
+        build(p << 1 | 1, m + 1, r, init);
         push_up(p);
     }
 
@@ -25,8 +25,8 @@ template <typename Info, int N> struct Segment_Tree {
         if (l == r)
             return (void)(f[p] = init[l]);
         int m = (l + r) >> 1;
-        build(p << 1 | 1, l, m, init);
-        build(p << 1, m + 1, r, init);
+        build(p << 1, l, m, init);
+        build(p << 1 | 1, m + 1, r, init);
         push_up(p);
     }
 
@@ -35,9 +35,9 @@ template <typename Info, int N> struct Segment_Tree {
             return (void)(f[p].update(x));
         int m = (l + r) >> 1;
         if (u <= m)
-            update(p << 1 | 1, l, m, u, x);
+            update(p << 1, l, m, u, x);
         else
-            update(p << 1, m + 1, r, u, x);
+            update(p << 1 | 1, m + 1, r, u, x);
         push_up(p);
     }
 
@@ -47,6 +47,6 @@ template <typename Info, int N> struct Segment_Tree {
         if (L <= l && r <= R)
             return f[p];
         int m = (l + r) >> 1;
-        return query(p << 1 | 1, l, m, L, R) + query(p << 1, m + 1, r, L, R);
+        return query(p << 1, l, m, L, R) + query(p << 1 | 1, m + 1, r, L, R);
     }
 };
