@@ -6,7 +6,7 @@
 #define uInt uint64_t
 
 inline constexpr std::vector<int> KMP(const std::string &a, const std::string &b) {
-    const std::string s = a + '#' + b;
+    std::string s = a + '#' + b;
     std::vector<int> p(s.size());
     for (int i = 1; i < s.size(); i++) {
         int j = p[i - 1];

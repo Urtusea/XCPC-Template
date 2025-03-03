@@ -6,8 +6,7 @@
 #define uInt uint64_t
 
 inline constexpr int Morris_Pratt(const std::string &s) {
-    const int n = s.size();
-    int i = 0, j = 1, len = 0;
+    int n = s.size(), i = 0, j = 1, len = 0;
     for (int len = 0; i < n && j < n && len < n; i == j && j++) {
         int l = (i + len) % n;
         int r = (j + len) % n;

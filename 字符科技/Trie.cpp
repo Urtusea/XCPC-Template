@@ -7,8 +7,7 @@
 
 constexpr int M[] = {0, 10, 26, 36, 26, 36, 52, 62};
 
-template <int N, int State, int M = M[State]>
-struct Trie {
+template <int State, int N, int M = M[State]> struct Trie {
     constexpr static std::array<int, 128> Map = []() -> std::array<int, 128> {
         std::array<int, 128> Map = {};
         if constexpr (State >> 0 & 1) for (char c = '0'; c <= '9'; c++) Map[c] = Map[0]++;

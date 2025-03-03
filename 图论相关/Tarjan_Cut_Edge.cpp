@@ -11,11 +11,11 @@ inline constexpr std::vector<int> Tarjan_Cut_Edge(int n, int m, const auto &G) {
     std::vector<int> cut(2 * m + 2);
 
     int timer = 0;
-    const auto tarjan = [&](auto &&self, int u, int pre_id) -> void {
+    const auto tarjan = [&](auto &&self, int u, int pid) -> void {
         dfn[u] = low[u] = ++timer;
         
         for (auto to : G[u]) {
-            if (to.id == (pre_id ^ 1)) continue;
+            if (to.id == (pid ^ 1)) continue;
             
             if (!dfn[to.v]) {
                 self(self, to.v, to.id);
