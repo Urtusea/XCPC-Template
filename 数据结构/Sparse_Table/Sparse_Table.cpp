@@ -7,7 +7,7 @@
 
 template <typename Info, Info (*Comp)(Info l, Info r), int N> struct Sparse_Table {
     int n;
-    Info f[N * (std::__lg(N) + 1)];
+    Info f[N * (std::__lg(N) + 1) + 1];
 
     inline constexpr int pos(int i, int j) const noexcept {
         return i * n + j;

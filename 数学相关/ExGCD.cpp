@@ -6,7 +6,7 @@
 #define uInt uint64_t
 
 template <std::integral T>
-std::tuple<T, T, T> Exgcd(T a, T b) {
+inline constexpr std::tuple<T, T, T> Exgcd(T a, T b) {
     T x1 = 1, x2 = 0, x3 = 0, x4 = 1, c;
     while (b) {
         c = a / b;
