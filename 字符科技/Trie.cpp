@@ -18,13 +18,13 @@ template <int State, int N, int M = M[State]> struct Trie {
     int p;
     int f[N + 1][M + 2];
 
+    inline constexpr int nxt(int &u) & noexcept {
+        return u ? u : u = ++p;
+    }
+
     void clear() {
         std::memset(f, 0, sizeof(f[0]) * (p + 1));
         p = 0;
-    }
-
-    int nxt(int &u) {
-        return u ? u : u = ++p;
     }
 
     void insert(const std::string &s, int u = 0) {

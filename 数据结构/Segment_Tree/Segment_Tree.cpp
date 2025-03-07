@@ -32,7 +32,7 @@ template <typename Info, int N> struct Segment_Tree {
 
     void update(int p, int l, int r, int u, Info x) {
         if (l == r)
-            return (void)(f[p].update(x));
+            return (void)(f[p].update(x, r - l + 1));
         int m = (l + r) >> 1;
         if (u <= m)
             update(p << 1, l, m, u, x);
