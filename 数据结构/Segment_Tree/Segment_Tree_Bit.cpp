@@ -32,8 +32,8 @@ template <typename Info, int N> struct Segment_Tree_Bit {
         Info Lres = Info();
         Info Rres = Info();
         for (int i = l + offset - 1, j = r + offset + 1; i ^ j ^ 1; i >>= 1, j >>= 1) {
-            !(i & 1) && Lres = Lres + f[i ^ 1];
-             (j & 1) && Rres = f[j ^ 1] + Rres;
+            if (!(i & 1)) Lres = Lres + f[i ^ 1];
+            if ( (j & 1)) Rres = f[j ^ 1] + Rres;
         }
         return Lres + Rres;
     }
