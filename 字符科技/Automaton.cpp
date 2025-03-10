@@ -7,7 +7,7 @@
 
 constexpr int M[] = {0, 10, 26, 36, 26, 36, 52, 62};
 
-template <int State, int N, int M = M[State]> struct Trie {
+template <int State, int N, int M = M[State]> struct Automaton {
     constexpr static std::array<int, 128> Map = []() -> std::array<int, 128> {
         std::array<int, 128> Map = {};
         if constexpr (State >> 0 & 1) for (char c = '0'; c <= '9'; c++) Map[c] = Map[0]++;
@@ -16,7 +16,7 @@ template <int State, int N, int M = M[State]> struct Trie {
         return Map;
     }();
     int p;
-    int f[N + 1][M + 2];
+    int f[N + 1][M + 3];
 
     inline constexpr int nxt(int &u) & noexcept {
         return u ? u : u = ++p;
@@ -39,9 +39,30 @@ template <int State, int N, int M = M[State]> struct Trie {
         f[u][M + 1]--;
     }
 
-    int count(const std::string &s, int Mode = 0, int u = 0) {
-        for (auto &c : s)
-            if ((u = f[u][Map[c]]) == 0) return 0;
-        return f[u][M + Mode];
+    void build() {
+        std::queue<int> q;
+        for (int i = 0; i < M; i++)
+            if (f[0][i]) q.push(f[0][i]);
+        while (!q.empty()) {
+            auto u = q.front(); q.pop();
+            for (int v = 0, j = f[u][M + 2]; v < M; v++) {
+                if (f[u][v]) {
+                    f[f[u][v]][M + 2] = f[j][v];
+                    q.push(f[u][v]);
+                } else {
+                    f[u][v] = f[j][v];
+                }
+            }
+        }
+    }
+
+    int query(const std::string &s, int u = 0, int res = 0) {
+        for (auto &c : s) {
+            for (int v = (u = f[u][Map[c]]); v && f[v][M + 1] != -1; v = f[v][M + 2]) {
+                res += f[v][M + 1];
+                f[v][M + 1] = -1;
+            }
+        }
+        return res;
     }
 };
