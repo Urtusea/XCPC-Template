@@ -22,8 +22,6 @@
 
 在 C++ 中，我们姑且可以将 struct 和 class 看成一个东西，除了默认的访问和继承权限不同
 
-struct 是 public
-
-class 是 private
+struct 是 public，class 是 private
 
 ## 算法基础
