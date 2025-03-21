@@ -5,8 +5,7 @@
 #define uint uint32_t
 #define uInt uint64_t
 
-template <int B>
-struct Xor_Linear_Basis {
+template <int B> struct Xor_Linear_Basis {
     using Info = std::conditional_t<B <= 31, uint, uInt>;
     Info node[B + 1];
 
