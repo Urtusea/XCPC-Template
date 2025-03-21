@@ -9,7 +9,7 @@ template <int N> struct Cartesian_Tree {
     int l[N + 1];
     int r[N + 1];
 
-    template <typename Info, Info (*Comp)(Info l, Info r)>
+    template <typename Info, bool (*Comp)(Info l, Info r)>
     void build(int n, std::vector<Info> &init) {
         std::vector<int> stk = {0};
         for (int i = 1; i <= n; i++) {
