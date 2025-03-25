@@ -23,11 +23,15 @@ struct LineID : public Line<T> {
     }
 };
 
-template <typename Info, bool (*Comp)(Info l, Info r), int N> struct Segment_Line {
+template <typename Info, int (*Comp)(Info l, Info r, int x), int N> struct Segment_Tree_Line {
     Info f[4 << std::__lg(N)];
 
     void push_down(int p, int l, int r, Info line) {
-
+        int m = (l + r) >> 1;
+        if (Comp(f[p], line, m))
+            return std::swap(f[p], line);
+        if (Comp(f[p], line, l)) push_down(p << 1, l, m, line);
+        if (Comp(f[p], line, r)) push_down(p << 1 | 1, m + 1, r, line);
     }
 
     void update(int p, int l, int r, int L, int R, Info line) {
