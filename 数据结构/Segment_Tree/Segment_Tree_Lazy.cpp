@@ -42,14 +42,12 @@ template <typename Info, typename Lazy, int N> struct Segment_Tree_Lazy {
     }
 
     void update(int p, int l, int r, int L, int R, Lazy x) {
-        if (R < l || r < L)
-            return;
         if (L <= l && r <= R)
             return f[p].update(x, r - l + 1), g[p].update(x);
         int m = (l + r) >> 1;
         push_down(p, l, m, r);
-        update(p << 1, l, m, L, R, x);
-        update(p << 1 | 1, m + 1, r, L, R, x);
+        if (L <= m) update(p << 1, l, m, L, R, x);
+        if (m <  R) update(p << 1 | 1, m + 1, r, L, R, x);
         push_up(p);
     }
 
