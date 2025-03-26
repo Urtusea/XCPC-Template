@@ -15,20 +15,20 @@ template <typename T, typename Edge, int N> struct Edmonds_Karp {
     constexpr static T INF = std::numeric_limits<T>::max() / 2;
     int n;
     int m;
-    T a[N + 1];
-    T p[N + 1];
+    int p[N + 1];
+    T   a[N + 1];
+    std::vector<int>  G[N + 1];
     std::vector<Edge> E;
-    std::vector<int> G[N + 1];
 
     void init(int _n) {
         n = _n;
         m = 0;
-        for (int i = 1; i <= _n; i++)
+        for (int i = 0; i <= _n; i++)
             G[i].clear();
         E.clear();
     }
 
-    void add_edge(int u, int v, int flow) {
+    void add_edge(int u, int v, T flow) {
         m += 2;
         E.emplace_back(u, v, flow, 0);
         E.emplace_back(v, u, 0, 0);
@@ -41,23 +41,24 @@ template <typename T, typename Edge, int N> struct Edmonds_Karp {
         while (true) {
             std::memset(a, 0, sizeof(T) * (n + 1));
             std::queue<int> q;
-            a[s] = INF;
             q.push(s);
+            a[s] = INF;
             while (!q.empty()) {
-                auto u = q.front(); q.pop();
-                for (auto to : G[u]) {
+                auto x = q.front(); q.pop();
+                for (auto to : G[x]) {
                     auto &[u, v, flow, cost] = E[to];
                     if (!a[v] && flow > cost) {
                         p[v] = to;
-                        a[v] = std::min(a[u], flow - cost);
+                        a[v] = std::min(a[x], flow - cost);
+                        if (v == t) break;
                         q.push(v);
                     }
                 }
             }
             if (!a[t]) break;
             for (int u = t; u != s; u = E[p[u]].u) {
-                E[p[u]].cost += a[u];
-                E[p[u] ^ 1].cost -= a[u];
+                E[p[u]].cost += a[t];
+                E[p[u] ^ 1].cost -= a[t];
             }
             res += a[t];
         }
