@@ -17,10 +17,8 @@ template <typename T, typename Edge, int N> struct Dinic {
     constexpr static T INF = std::numeric_limits<T>::max() / 2;
     int n;
     int m;
-    int p[N + 1];
     int d[N + 1];
     int c[N + 1];
-    T   a[N + 1];
     std::vector<int>  G[N + 1];
     std::vector<Edge> E;
 
@@ -40,15 +38,15 @@ template <typename T, typename Edge, int N> struct Dinic {
     }
 
     bool bfs(int s, int t) {
-        std::memset(d, -1, sizeof(int) * (n + 1));
+        std::memset(d, 0, sizeof(int) * (n + 1));
         std::queue<int> q;
         q.push(s);
-        d[s] = 0;
+        d[s] = 1;
         while (!q.empty()) {
             auto u = q.front(); q.pop();
             for (auto to : G[u]) {
                 auto &[u, v, c, f] = E[to];
-                if (c > f && d[v] == -1) {
+                if (!d[v] && c > f) {
                     d[v] = d[u] + 1;
                     if (v == t) return true;
                     q.push(v);
@@ -59,7 +57,28 @@ template <typename T, typename Edge, int N> struct Dinic {
     }
 
     T dfs(int u, int t, T f) {
-        if (u == t) return f;
+        if (u == t || !f) return f;
         
+        T F = T();
+        for (int &i = c[u]; i < G[u].size(); i++) {
+            int to = G[u][i];
+            if (d[E[to].v] == d[u]) {
+                T tmp = dfs(E[to].v, min(f - F, E[to].c - E[to].f));
+                F += tmp;
+                E[to].f += tmp;
+                E[to ^ 1].f -= tmp;
+                if (F == f) return F;
+            }
+        }
+        return F;
+    }
+
+    T work(int s, int t) {
+        T res = T();
+        while (bfs(s, t)) {
+            std::memset(c, 0, sizeof(c));
+            res += dfs(s, t, INF);
+        }
+        return res;
     }
 };
