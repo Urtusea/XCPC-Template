@@ -60,14 +60,13 @@ template <typename T, typename Edge, int N> struct Dinic {
         if (u == t || !f) return f;
         
         T F = T();
-        for (int &i = c[u]; i < G[u].size(); i++) {
+        for (int &i = c[u]; i < G[u].size() && F < f; i++) {
             int to = G[u][i];
-            if (d[E[to].v] == d[u]) {
-                T tmp = dfs(E[to].v, min(f - F, E[to].c - E[to].f));
+            if (d[E[to].v] == d[u] + 1) {
+                T tmp = dfs(E[to].v, t, std::min(f - F, E[to].c - E[to].f));
                 F += tmp;
                 E[to].f += tmp;
                 E[to ^ 1].f -= tmp;
-                if (F == f) return F;
             }
         }
         return F;
