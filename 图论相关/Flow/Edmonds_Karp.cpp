@@ -5,10 +5,12 @@
 #define uint uint32_t
 #define uInt uint64_t
 
-template <typename T> struct Flow_Edge {
-    int u, v;
-    T flow, cost;
-    Flow_Edge(int _u = 0, int _v = 0, T _flow = T(), T _cost = T()) : u(_u), v(_v), flow(_flow), cost(_cost) {}
+template <typename T> struct Edge {
+    int u;
+    int v;
+    T   c;
+    T   f;
+    Edge(int _u = 0, int _v = 0, T _c = T(), T _f = T()) : u(_u), v(_v), c(_c), f(_f) {}
 };
 
 template <typename T, typename Edge, int N> struct Edmonds_Karp {
@@ -28,39 +30,41 @@ template <typename T, typename Edge, int N> struct Edmonds_Karp {
         E.clear();
     }
 
-    void add_edge(int u, int v, T flow) {
-        m += 2;
-        E.emplace_back(u, v, flow, 0);
+    void add_edge(int u, int v, T f) {
+        E.emplace_back(u, v, f, 0);
         E.emplace_back(v, u, 0, 0);
-        G[u].push_back(m - 2);
-        G[v].push_back(m - 1);
+        G[u].push_back(m++);
+        G[v].push_back(m++);
+    }
+
+    bool bfs(int s, int t) {
+        std::memset(a, 0, sizeof(T) * (n + 1));
+        std::queue<int> q;
+        q.push(s);
+        a[s] = INF;
+        while (!q.empty()) {
+            auto u = q.front(); q.pop();
+            for (auto to : G[u]) {
+                auto &[u, v, c, f] = E[to];
+                if (!a[v] && c > f) {
+                    p[v] = to;
+                    a[v] = std::max(a[u], c - f);
+                    if (v == t) return true;
+                    q.push(v);
+                }
+            }
+        }
+        return false;
     }
 
     T work(int s, int t) {
         T res = T();
-        while (true) {
-            std::memset(a, 0, sizeof(T) * (n + 1));
-            std::queue<int> q;
-            q.push(s);
-            a[s] = INF;
-            while (!q.empty()) {
-                auto x = q.front(); q.pop();
-                for (auto to : G[x]) {
-                    auto &[u, v, flow, cost] = E[to];
-                    if (!a[v] && flow > cost) {
-                        p[v] = to;
-                        a[v] = std::min(a[x], flow - cost);
-                        if (v == t) break;
-                        q.push(v);
-                    }
-                }
-            }
-            if (!a[t]) break;
-            for (int u = t; u != s; u = E[p[u]].u) {
-                E[p[u]].cost += a[t];
-                E[p[u] ^ 1].cost -= a[t];
-            }
+        while (bfs(s, t)) {
             res += a[t];
+            for (int u = t; u != s; u = E[p[u]].u) {
+                E[p[u]].f += a[t];
+                E[p[u] ^ 1].f -= a[t];
+            }
         }
         return res;
     }
