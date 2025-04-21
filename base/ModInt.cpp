@@ -88,6 +88,7 @@ template <typename ModInt, typename T> struct ModIntBase {
   ModInt operator * (const ModInt& t) const { return ModInt(to_modint()) *= t; }
   ModInt operator / (const ModInt& t) const { return ModInt(to_modint()) /= t; }
   auto operator ==  (const ModInt& t) const { return getr() == t.getr(); }
+  auto operator !=  (const ModInt& t) const { return getr() != t.getr(); }
   auto operator <=> (const ModInt& t) const { return getr() <=> t.getr(); }
 
   void setr(uInt_ _r) { r = transform(_r); }

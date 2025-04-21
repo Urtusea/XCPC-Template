@@ -22,7 +22,7 @@ template <typename Info, int N> struct SegmentTree {
 
   void update(int p, int l, int r, int u, const Info& x) {
     if (u < l || r < u) return;
-    if (l == r) return f[u].update(x);
+    if (l == r) return f[p].update(x);
     int m = (l + r) / 2 + 1;
     if (u < m) update(p << 1, l, m - 1, u, x);
     else       update(p << 1 | 1, m, r, u, x);
