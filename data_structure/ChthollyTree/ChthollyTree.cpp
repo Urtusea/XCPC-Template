@@ -9,10 +9,10 @@ template <typename Info> struct ChthollyTree {
   using iterator = typename std::map<int, Info>::iterator;
   std::map<int, Info> odt;
   
-  void init(int n, const Info& _init) {
+  void init(int l, int r, const Info& _init) {
     odt.clear();
-    odt[1] = _init;
-    odt[n + 1] = _init;
+    odt[l] = _init;
+    odt[r + 1] = _init;
   }
 
   iterator split(int p) {
