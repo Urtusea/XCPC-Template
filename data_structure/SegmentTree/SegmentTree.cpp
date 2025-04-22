@@ -21,7 +21,7 @@ template <typename Info, int N> struct SegmentTree {
   }
 
   void update(int p, int l, int r, int u, const Info& x) {
-    if (u < l || r < u) return;
+    if (u < l || r < u) [[unlikely]] return;
     if (l == r) return f[p].update(x);
     int m = (l + r) / 2 + 1;
     if (u < m) update(p << 1, l, m - 1, u, x);
@@ -30,7 +30,7 @@ template <typename Info, int N> struct SegmentTree {
   }
   
   Info query(int p, int l, int r, int L, int R) {
-    if (R <  l || r <  L) return Info();
+    if (R <  l || r <  L) [[unlikely]] return Info();
     if (L <= l && r <= R) return f[p];
     int m = (l + r) / 2 + 1;
     Info res = Info();

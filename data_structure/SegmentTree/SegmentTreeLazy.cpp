@@ -34,7 +34,7 @@ template <typename Info, typename Lazy, int N> struct SegmentTree {
   }
 
   void update(int p, int l, int r, int L, int R, const Lazy& tag) {
-    if (R <  l || r <  L) return;
+    if (R <  l || r <  L) [[unlikely]] return;
     if (L <= l && r <= R) {
       f[p].update(tag, r - l + 1);
       g[p].update(tag);
@@ -48,7 +48,7 @@ template <typename Info, typename Lazy, int N> struct SegmentTree {
   }
 
   Info query(int p, int l, int r, int L, int R) {
-    if (R <  l || r <  L) return Info();
+    if (R <  l || r <  L) [[unlikely]] return Info();
     if (L <= l && r <= R) return f[p];
     int m = (l + r) / 2 + 1;
     Info res = Info();
