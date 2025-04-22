@@ -21,7 +21,7 @@ template <typename Info> struct ChthollyTree {
     return odt.insert(it, {p, it->second});
   }
 
-  void assign(int l, int r, Info x) {
+  void assign(int l, int r, const Info& x) {
     if (l > r) return;
     auto it1 = split(l);
     auto it2 = split(r + 1);
