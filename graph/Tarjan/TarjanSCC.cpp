@@ -5,7 +5,7 @@
 #define uint uint32_t
 #define uInt uint64_t
 
-std::vector<int> TarjanSCC(int n, const auto& G) {
+inline std::vector<int> TarjanSCC(int n, const auto& G) {
   std::vector<int> dfn(n + 1);
   std::vector<int> low(n + 1);
   std::vector<int> scc(n + 1);
