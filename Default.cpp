@@ -5,15 +5,10 @@
 #define uint uint32_t
 #define uInt uint64_t
 
-void code() {
-    
-}
-
 int main() {
-    std::cin.tie(nullptr)->sync_with_stdio(false);
+  std::cin.tie(nullptr)->sync_with_stdio(false);
 
-    for (int i = 1, n = (std::cin >> n, n); i <= n; i++)
-        code();
+  
 
-    return 0;
+  return 0;
 }
