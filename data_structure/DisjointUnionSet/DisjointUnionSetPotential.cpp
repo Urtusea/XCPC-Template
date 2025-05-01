@@ -6,7 +6,7 @@
 #define uInt uint64_t
 
 template <typename Info, int N> struct DisjointUnionSet {
-  int set[N + 1];
+  int  set[N + 1];
   Info val[N + 1];
 
   void init(int n) {
