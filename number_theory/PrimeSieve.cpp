@@ -13,7 +13,7 @@ inline std::vector<int> PrimeSieve(int n) {
     for (int j = i << 1; j <= n; j += i)
       is_prime[j] = 1;
   }
-  for (int i = 1; i <= n; i++) {
+  for (int i = 2; i <= n; i++) {
     if (!is_prime[i]) prime.push_back(i);
   }
   return prime;
