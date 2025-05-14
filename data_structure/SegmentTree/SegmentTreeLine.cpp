@@ -6,6 +6,7 @@
 #define uInt uint64_t
 
 template <typename T> struct Line {
+  using type = T;
   T k, b;
   Line() {}
   constexpr T operator () (int x) const {
@@ -13,12 +14,8 @@ template <typename T> struct Line {
   }
 };
 
-template <typename T> struct LineID : public Line<T> {
-  int id;
-  LineID() {}
-};
-
 template <typename Info, auto Comp, int N> struct SegmentTree {
+  using Type = typename Info::type;
   Info f[(4 << std::__lg(N)) + 1];
 
   void push_down(int p, int l, int r, const Info& line) {
@@ -33,5 +30,14 @@ template <typename Info, auto Comp, int N> struct SegmentTree {
     int m = (l + r) / 2 + 1;
     if (L <  m) update(p << 1, l, m - 1, L, R, line);
     if (R >= m) update(p << 1 | 1, m, r, L, R, line);
+  }
+
+  Type query(int p, int l, int r, int x) {
+    if (l == r) return f[p](x);
+    int m = (l + r) / 2 + 1;
+    Type res = f[p](x);
+    if (x <  m) res = std::max(res, query(p << 1, l, m - 1, x));
+    if (x >= m) res = std::max(res, query(p << 1 | 1, r, m, x));
+    return res;
   }
 };
