@@ -15,15 +15,14 @@ template <typename Info, int N, int M> struct SegmentTree {
   }
 
   void build(int p, int l, int r, auto&& call) {
-    lst = std::max(lst, p);
-    if (l == r) return void(f[p] = call(l));
+    if (l == r) return void(f[p] = call(l), lst = std::max(lst, p));
     int m = (l + r) / 2 + 1;
     build(son[p][0] = p << 1, l, m - 1, call);
     build(son[p][1] = p << 1 | 1, m, r, call);
     push_up(p);
   }
 
-  void update(int &p, int q, int l, int r, int u, const Info& x) {
+  void update(int& p, int q, int l, int r, int u, const Info& x) {
     if (u < l || r < u) [[unlikely]] return;
     f[p = ++lst] = f[q];
     son[p][0] = son[q][0];

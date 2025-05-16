@@ -33,12 +33,12 @@ template <typename Info, auto Comp, int N> struct SegmentTree {
     if (R >= m) update(p << 1 | 1, m, r, L, R, line);
   }
 
-  Type query(int p, int l, int r, int x) {
+  Type query(int p, int l, int r, int x, auto&& check) {
     if (l == r) return f[p](x);
     int m = (l + r) / 2 + 1;
     Type res = f[p](x);
-    if (x <  m) res = std::max(res, query(p << 1, l, m - 1, x));
-    if (x >= m) res = std::max(res, query(p << 1 | 1, m, r, x));
+    if (x <  m) res = check(res, query(p << 1, l, m - 1, x));
+    if (x >= m) res = check(res, query(p << 1 | 1, m, r, x));
     return res;
   }
 };
