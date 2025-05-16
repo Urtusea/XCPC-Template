@@ -34,9 +34,7 @@ template <int N> struct LowestCommonAncestor {
 
   int query(int u, int v) {
     if (u == v) return u;
-    u = g[u];
-    v = g[v];
-    if (u <= v) std::swap(u, v);
+    if (u = g[u], v = g[v]; u <= v) std::swap(u, v);
     const int k = std::__lg(u - v++);
     return comp(f[k][v], f[k][u - (1 << k) + 1]);
   }
